@@ -2,10 +2,13 @@
 #define POINT_H
 #define PI 3.14159
 #define PI_ 0.318309
-class Point {
+
+class Point 
+{
 public:
     Point(double xPos, double yPos);
     virtual ~Point() {};
+    
     double getXPos() const;
     double getYPos() const;
     void setXPos(double xPos);

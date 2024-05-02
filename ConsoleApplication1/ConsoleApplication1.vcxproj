@@ -129,7 +129,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CircularField.cpp" />
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Medium.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="RayTip.cpp" />
     <ClCompile Include="test0.cpp" />
     <ClCompile Include="Monitor.h" />
   </ItemGroup>

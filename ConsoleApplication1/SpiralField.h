@@ -2,11 +2,14 @@
 #define SPIRALFIELD_H
 #include"Field.h"
 #include"Medium.h"
-class SpiralField : public Field{
+
+class SpiralField : public Field
+{
 public:
-	SpiralField(Point Source, double s_Amplitude, double s_Frequency, double s_InitialPhase, int s_Speed);
+	SpiralField(const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed);
 	virtual ~SpiralField() {};
-	virtual void ActivateMedium(float ElapsedTime, Medium GlobalMedium[ScreenWidth * ScreenHeight]);
+	
+	virtual void ActivateMedium(const double& timeOfNow, const double& frameTime, Medium[ScreenWidth * ScreenHeight]);
 };
 #endif //SPIRALFIELD_H
 

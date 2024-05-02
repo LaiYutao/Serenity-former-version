@@ -2,18 +2,23 @@
 #define MEDIUM_H
 #include"Point.h"
 #include<chrono>
-class Medium : public Point {//到时将整个地图的每个像素都创建为Medium，用数组迭代；
+#include<cmath>
+
+class Medium : public Point 
+{//到时将整个地图的每个像素都创建为Medium，用数组迭代；
 public:
-	Medium(double xPos, double yPos);
+	Medium(const double& xPos, const double& yPos);
 	virtual ~Medium() {};
-	void GetActivated(const double &Amplitude, const double &Frequency, const double &InitialPhase);
+	void GetActivated(const double& timeOfNow, const double& newAmplitude, const double& newFrequency, const double& newInitialPhase);
+	void Vibrate(const double& timeOfNow);
 	double getCurrentFrequency() const;
-	double getCurrentPhase() const;
+	double getCurrentInitialPhase() const;
 	double getCurrentAmplitude() const;
+
 private:
-	double CurrentFrequency;
-	double CurrentPhase;
 	double CurrentAmplitude;
+	double CurrentFrequency;
+	double CurrentInitialPhase;
 	double Height;
 };
 #endif // MEDIUM_H

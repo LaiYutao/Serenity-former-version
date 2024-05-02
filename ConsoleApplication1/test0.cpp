@@ -33,9 +33,9 @@ void showCursor() {
 
 // 绘制一个像素
 void drawPixel(int x, int y, char symbol) {
-    COORD pos = { x * 2, y }; // 加倍x以调整比例
+    COORD pos = { 2*x, y }; // 加倍x以调整比例
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-    std::cout << symbol << symbol; // 使用两个字符模拟正方形
+    std::cout << symbol<<symbol; // 使用两个字符模拟正方形
 }
 
 // 模拟波传播

@@ -1,11 +1,14 @@
 #ifndef CIRCULARFIELD_H
 #define CIRCULARFIELD_H
 #include"Field.h"
-class CircularField : public Field {
+
+class CircularField : public Field 
+{
 public:
-	CircularField(Point Source, double s_Amplitude, double s_Frequency, double s_InitialPhase, int s_Speed);
+	CircularField(const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed);
 	virtual ~CircularField() {};
-	virtual void ActivateMedium(float ElapsedTime,Medium[ScreenWidth * ScreenHeight]);
+	
+	virtual void ActivateMedium(const double& timeOfNow, const double& frameTime,Medium[ScreenWidth * ScreenHeight]);
 	
 };
 #endif //CIRCULARFIELD_H
