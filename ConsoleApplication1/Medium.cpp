@@ -1,28 +1,20 @@
 #include "Medium.h"
 
-Medium::Medium(const double& xPos, const double& yPos)
-    : Point(xPos, yPos), CurrentFrequency(0), CurrentInitialPhase(0), CurrentAmplitude(0), Height(0) 
+Medium::Medium(): CurrentAmplitude(0), CurrentFrequency(0), CurrentInitialPhase(0), Height(0)
 {
 }
 
 //介质被激活，接受“场”的参数
 void Medium::GetActivated(const double& timeOfNow, const double& newAmplitude, const double& newFrequency, const double& newInitialPhase)
 {
-    //计算并设置振动方程参数（t=timeOfNow时的情况）（需要考虑后续其他波的影响）
-    if (CurrentAmplitude == 0)
-    {
-        //振幅、频率直接传入即可
-        CurrentAmplitude = newAmplitude;
-        CurrentFrequency = newFrequency;
+    //计算并设置振动方程参数（t=timeOfNow时的情况）  
+    //振幅、频率直接传入即可  
+    CurrentAmplitude = newAmplitude;   
+    CurrentFrequency = newFrequency;
 
-        //t=timeOfNow时，Height为0，结合振动方向（向上还是向下，此时相位就是Source处初相位），推出以t=0为起点的初相位
-        CurrentInitialPhase = newInitialPhase - 2*PI*CurrentFrequency * timeOfNow; // t=timeOfNow时，cos内部对应就是newInitialPhase; 角频率ω=2πf（frequency）
+    //t=timeOfNow时，Height为0，结合振动方向（向上还是向下，此时相位就是Source处初相位），推出以t=0为起点的初相位
+    CurrentInitialPhase = newInitialPhase - 2*PI*CurrentFrequency * timeOfNow; // t=timeOfNow时，cos内部对应就是newInitialPhase; 角频率ω=2πf（frequency）
 
-    }
-    else//叠加的情况
-    {
-        //待补充的函数体：起到波的叠加作用
-    }
 }
 
 //振动，即是改变Height的值，后续由Monitor对象转化为字符显示

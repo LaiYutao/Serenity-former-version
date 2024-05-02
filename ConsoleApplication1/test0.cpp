@@ -77,15 +77,15 @@ void simulateWavePropagation(const Point& source, double speed, double maxRadius
    //showCursor(); // 在绘制后显示光标
 }
 
-int main() {
-    // 波的中心点
-    Point source = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
-
-    // 速度和最大半径
-    double speed = 0.2;
-    double maxRadius = 100.0;
-
-    simulateWavePropagation(source, speed, maxRadius); // 开始模拟
-
-    return 0;
-}
+//int main() {
+//    // 波的中心点
+//    Point source = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
+//
+//    // 速度和最大半径
+//    double speed = 0.2;
+//    double maxRadius = 100.0;
+//
+//    simulateWavePropagation(source, speed, maxRadius); // 开始模拟
+//
+//    return 0;
+//}

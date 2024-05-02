@@ -6,9 +6,13 @@
 CircularField::CircularField(const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed)
 	:Field(s_Position, s_Amplitude, s_Frequency, s_InitialPhase, s_Speed)
 {
+	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
+	{
+		MediumLayer[i] = Medium();//显式初始化为0
+	}
 }
 
-void CircularField::ActivateMedium(const double& timeOfNow, const double& frameTime,Medium globalMedium[ScreenWidth * ScreenHeight])
+void CircularField::ActivateMedium(const double& timeOfNow, const double& frameTime)
 {
 	static const int NumberOfRay = (ScreenWidth + ScreenHeight) * 2 - 4;//屏幕最外圈点的个数，作为发出光线的数量
 	
@@ -48,7 +52,7 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		int MediumPixelIndex = ScreenWidth * (int)BunchOfRayTips[i].getYPos() + (int)BunchOfRayTips[i].getXPos();
 		if (!IfActivated[MediumPixelIndex])
 		{
-			globalMedium[MediumPixelIndex].GetActivated(timeOfNow,this->getSourceAmplitude(),this->getSourceFrequency(),this->getSourceInitialPhase());
+			MediumLayer[MediumPixelIndex].GetActivated(timeOfNow,this->getSourceAmplitude(),this->getSourceFrequency(),this->getSourceInitialPhase());
 			IfActivated[MediumPixelIndex] = true;
 		}
 	}

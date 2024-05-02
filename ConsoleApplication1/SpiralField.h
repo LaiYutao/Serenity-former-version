@@ -9,7 +9,7 @@ public:
 	SpiralField(const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed);
 	virtual ~SpiralField() {};
 	
-	virtual void ActivateMedium(const double& timeOfNow, const double& frameTime, Medium[ScreenWidth * ScreenHeight]);
+	virtual void ActivateMedium(const double& timeOfNow, const double& frameTime);
 };
 #endif //SPIRALFIELD_H
 
