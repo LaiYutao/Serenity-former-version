@@ -1,6 +1,6 @@
 #include "Medium.h"
 
-Medium::Medium(): CurrentAmplitude(0), CurrentFrequency(0), CurrentInitialPhase(0), Height(0)
+Medium::Medium(const double& sourceCreationTime):SourceCreationTime(sourceCreationTime), CurrentAmplitude(0), CurrentFrequency(0), CurrentInitialPhase(0), Height(0)
 {
 }
 
@@ -13,7 +13,7 @@ void Medium::GetActivated(const double& timeOfNow, const double& newAmplitude, c
     CurrentFrequency = newFrequency;
 
     //t=timeOfNow时，Height为0，结合振动方向（向上还是向下，此时相位就是Source处初相位），推出以t=0为起点的初相位
-    CurrentInitialPhase = newInitialPhase - 2*PI*CurrentFrequency * timeOfNow; // t=timeOfNow时，cos内部对应就是newInitialPhase; 角频率ω=2πf（frequency）
+    CurrentInitialPhase = newInitialPhase - 2*PI*CurrentFrequency * (timeOfNow - SourceCreationTime); // t=timeOfNow时，cos内部对应就是newInitialPhase; 角频率ω=2πf（frequency）
 
 }
 

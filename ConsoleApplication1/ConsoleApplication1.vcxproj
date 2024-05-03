@@ -132,6 +132,7 @@
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Medium.cpp" />
+    <ClCompile Include="Monitor.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="RayTip.cpp" />
     <ClCompile Include="test0.cpp" />
@@ -141,7 +142,7 @@
     <ClInclude Include="CircularField.h" />
     <ClInclude Include="DiscJockey.h" />
     <ClInclude Include="Field.h" />
-    <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Gardener.h" />
     <ClInclude Include="Medium.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="RayTip.h" />

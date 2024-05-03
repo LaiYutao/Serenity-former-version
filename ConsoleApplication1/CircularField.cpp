@@ -3,13 +3,9 @@
 #include"Medium.h"
 #include"RayTip.h"
 
-CircularField::CircularField(const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed)
-	:Field(s_Position, s_Amplitude, s_Frequency, s_InitialPhase, s_Speed)
+CircularField::CircularField(const double& creationTime,const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed)
+	:Field(creationTime,s_Position, s_Amplitude, s_Frequency, s_InitialPhase, s_Speed)
 {
-	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
-	{
-		MediumLayer[i] = Medium();//显式初始化为0
-	}
 }
 
 void CircularField::ActivateMedium(const double& timeOfNow, const double& frameTime)
@@ -39,6 +35,26 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		}
 	}
 
+	//如果每个Medium点都已经被激活，就不再进行激活的常规操作
+	static bool StopActivation = false;
+	if (StopActivation == true)return;//只要在一次GameLoop中，Medium全部都已激活，那么后续所有循环中，都是如此
+	
+	bool CheckActivation = true;
+	for (int i = 0;i < ScreenWidth * ScreenHeight;++i) 
+	{
+		if (!IfActivated[i])
+		{
+			CheckActivation = false;
+			break;
+		}
+	}
+	if (CheckActivation == true)
+	{
+		StopActivation = true;
+	}
+
+	//以下是激活还未完成时的正常步骤：
+	
 	//遍历每一条射线
 	for (int i = 0;i < NumberOfRay;++i) 
 	{

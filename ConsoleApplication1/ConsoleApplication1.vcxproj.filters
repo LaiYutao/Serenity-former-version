@@ -39,6 +39,9 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Monitor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.h">
@@ -53,7 +56,7 @@
     <ClInclude Include="CircularField.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Keyboard.h">
+    <ClInclude Include="Gardener.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ScreenManager.h">
