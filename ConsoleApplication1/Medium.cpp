@@ -30,6 +30,11 @@ void Medium::Vibrate(const double& timeOfNow)
     }
 }
 
+double Medium::getCurrentAmplitude() const
+{
+    return CurrentAmplitude;
+}
+
 double Medium::getCurrentFrequency() const 
 {
     return CurrentFrequency;
@@ -40,7 +45,7 @@ double Medium::getCurrentInitialPhase() const
     return CurrentInitialPhase;
 }
 
-double Medium::getCurrentAmplitude() const 
+double Medium::getHeight()const
 {
-    return CurrentAmplitude;
+    return Height;
 }

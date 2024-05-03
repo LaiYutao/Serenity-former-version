@@ -8,15 +8,21 @@
 #include<chrono>
 #include<thread>
 
+
 //包含主loop在内的主干
 void Act(ScreenManger screenManager)
 {
 	const int kFrameTime = 16;// 每帧时长为16毫秒，帧率为60fps
 	//设定时间原点
 	double TimeOrigin = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-	
 	auto tp1 = std::chrono::high_resolution_clock::now();
 	auto tp2 = std::chrono::high_resolution_clock::now();
+
+	//创建由所有场叠加而成的复合场
+	std::vector <Field> CompoundField;
+	
+	//创建由所有场对应介质层叠加而成的复合介质
+	std::vector<Medium[ScreenWidth * ScreenHeight]> CompoundMedium;
 
 	//主循环
 	while (1) 
