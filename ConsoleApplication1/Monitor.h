@@ -9,7 +9,8 @@ class Monitor
 public:
     Monitor();
     void UpdateCompoundHeight(std::vector<Medium[ScreenWidth * ScreenHeight]> compoundMedium);
-    void ChangeIntoPixel(std::vector<char> buffer,double heightLayer[ScreenWidth * ScreenHeight]);//接受每个Medium的Height,然后映射到对应字符。
+    void ChangeIntoPixel(std::vector<char>& buffer,double compoundHeight[ScreenWidth * ScreenHeight]);//接受每个Medium的Height,然后映射到对应字符。
+    void AddPlantingPoint(std::vector<char>& buffer,const Point& plantingPoint);
 private:
     double CompoundHeight[ScreenWidth * ScreenHeight];
 };

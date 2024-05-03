@@ -18,12 +18,6 @@ void Act(ScreenManger screenManager)
 	auto tp1 = std::chrono::high_resolution_clock::now();
 	auto tp2 = std::chrono::high_resolution_clock::now();
 
-	//创建由所有场叠加而成的复合场
-	std::vector <Field> CompoundField;
-	
-	//创建由所有场对应介质层叠加而成的复合介质
-	std::vector<Medium[ScreenWidth * ScreenHeight]> CompoundMedium;
-
 	//主循环
 	while (1) 
 	{

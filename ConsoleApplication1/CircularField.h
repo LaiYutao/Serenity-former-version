@@ -8,7 +8,7 @@ public:
 	CircularField(const double& creationTime,const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed);
 	virtual ~CircularField() {};
 	
-	virtual void ActivateMedium(const double& timeOfNow, const double& frameTime);
+	void ActivateMedium (const double& timeOfNow, const double& frameTime) override;
 	
 };
 #endif //CIRCULARFIELD_H

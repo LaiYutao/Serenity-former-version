@@ -130,11 +130,13 @@
   <ItemGroup>
     <ClCompile Include="CircularField.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Gardener.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Medium.cpp" />
     <ClCompile Include="Monitor.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="RayTip.cpp" />
+    <ClCompile Include="ScreenManager.cpp" />
     <ClCompile Include="test0.cpp" />
     <ClCompile Include="Monitor.h" />
   </ItemGroup>
