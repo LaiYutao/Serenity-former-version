@@ -1,5 +1,10 @@
 #include "ScreenManager.h"
 
+std::vector<char>& ScreenManager::getRefScreenBuffer()
+{
+	return ScreenBuffer;
+}
+
 void ScreenManager::ShowPixel()
 {
 	int corScreenWidth = 2 * ScreenWidth; //ÐÞÕýÆÁÄ»¿í¶È
@@ -10,6 +15,7 @@ void ScreenManager::ShowPixel()
 			std::cout << std::endl;
 		}
 	}
+	ScreenClear();
 }
 
 void ScreenManager::SetEmptyBuffer()
@@ -22,4 +28,5 @@ void ScreenManager::ScreenClear()
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD coordScreen = { 0, 0 };
 	SetConsoleCursorPosition(hConsole, coordScreen);
+	SetEmptyBuffer();
 }

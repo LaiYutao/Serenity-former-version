@@ -16,6 +16,7 @@
 class ScreenManager
 {
 public:
+    std::vector<char>& getRefScreenBuffer();
     void ShowPixel();//修正的屏幕参数：因为横向单位输出两个字符，平衡高和宽
     void SetEmptyBuffer();
     void ScreenClear();

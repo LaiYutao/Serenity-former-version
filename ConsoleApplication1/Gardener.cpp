@@ -15,9 +15,14 @@ Point Gardener::getPlantingPoint() const
 	return PlantingPoint;
 }
 
-std::vector<Field*> Gardener::getCompoundField() const
+std::vector<Field*>& Gardener::getRefCompoundField()
 {
 	return CompoundField;
+}
+
+std::vector<std::vector<Medium>> Gardener::getCompoundMedium() const
+{
+	return CompoundMedium;
 }
 
 void Gardener::SelectPosition()
@@ -66,6 +71,7 @@ void Gardener::PlantIt(const double& timeOfNow)
 		if ((GetAsyncKeyState((unsigned short)'J') & 0x8000)&& !KeyJPressed)
 		{
 			CompoundField.push_back(new CircularField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
+			CompoundMedium.push_back(CompoundField[-1]->getRefMediumLayer());
 			SourceChecking[(int(PlantingPoint.getYPos()) * ScreenHeight + int(PlantingPoint.getXPos()))] = CompoundField.size();//记录此时创建的场的序号，从“1”开始
 			KeyJPressed = true;//防止刚创建就开始调节参数；而应该先放开一下，再考虑是否开始调节
 		}

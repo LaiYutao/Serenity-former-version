@@ -4,11 +4,16 @@ Monitor::Monitor()
 {
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
-		CompoundHeight[i] = 0;
+		CompoundHeight.push_back(0);
 	}
 }
 
-void Monitor::UpdateCompoundHeight(std::vector<Medium[ScreenWidth * ScreenHeight]> compoundMedium)
+std::vector<double> Monitor::getCompoundHeight() const
+{
+	return CompoundHeight;
+}
+
+void Monitor::UpdateCompoundHeight(const std::vector<std::vector<Medium>>& compoundMedium)
 {
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
@@ -20,7 +25,7 @@ void Monitor::UpdateCompoundHeight(std::vector<Medium[ScreenWidth * ScreenHeight
 	}
 }
 
-void Monitor::ChangeIntoPixel(std::vector<char>& buffer, double compoundHeight[ScreenWidth * ScreenHeight])
+void Monitor::ChangeIntoPixel(std::vector<char>& buffer, std::vector<double> compoundHeight)
 {
 	int Offset = (GrayScale - 1) / 2; //灰度阶字符串索引所需的偏移量
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)

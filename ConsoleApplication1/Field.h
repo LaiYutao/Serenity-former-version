@@ -7,6 +7,7 @@
 #include<chrono>
 #include<cmath>
 
+
 class Field 
 {
 public:
@@ -15,8 +16,10 @@ public:
 	                     //Field的初相位参量，指的是波源处振动方程的初相位，只能为π/2（下一刻向下振动），或者-π/2（下一刻向上振动）；
 	
 	virtual void ActivateMedium(const double& timeOfNow, const double& frameTime) = 0;//向四面八方发送“激活射线”
-	
+	void ClearIfActivated();
+
 	double getCreationTime()const;
+	std::vector<Medium>& getRefMediumLayer();
 	Point getSourcePosition()const;
 	double getSourceAmplitude() const;
 	double getSourceFrequency() const;
@@ -32,8 +35,7 @@ protected:
 	static const int NumberOfRay = (ScreenWidth + ScreenHeight) * 2 - 4;//屏幕最外圈点的个数，作为发出光线的数量
 	bool IfActivated[ScreenWidth * ScreenHeight];
 	RayTip BunchOfRayTips[NumberOfRay];
-	Medium MediumLayer[ScreenWidth * ScreenHeight];
-
+	std::vector<Medium> MediumLayer;
 private:
 	double CreationTime;
 	Point SourcePosition;

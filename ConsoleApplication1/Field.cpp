@@ -4,6 +4,7 @@ Field::Field(const double& creationTime, const Point& s_Position,const double& s
     : CreationTime(creationTime),SourcePosition(s_Position), SourceAmplitude(s_Amplitude), SourceFrequency(s_Frequency), SourceInitialPhase(s_InitialPhase), SourceSpeed(s_Speed)
 {
     //初始化MediumLayer：MediumLayer中每个Medium接收Field的创建时间
+    MediumLayer.resize(ScreenWidth * ScreenHeight);
     for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
     {
         MediumLayer[i] = Medium(this->getCreationTime());
@@ -36,6 +37,11 @@ void Field::ClearIfActivated()
 double Field::getCreationTime()const
 {
     return CreationTime;
+}
+
+std::vector<Medium>& Field::getRefMediumLayer()
+{
+    return MediumLayer;
 }
 
 Point Field::getSourcePosition() const 

@@ -34,11 +34,36 @@ void Act(ScreenManager TheScreenManager)
 		TheGardener.PlantIt(TimeOfNow);
 
 		//遍历CompoundField中的每一个场,让每个场开始在对应Medium层中对四周的Medium进行激活
-		for (auto TheField : TheGardener.getCompoundField())
+		for (auto TheField : TheGardener.getRefCompoundField())
 		{
 			TheField->ActivateMedium(TimeOfNow, FrameTime);
 		}
+		
+		//让每个场对应的Medium层的Medium都振动（改变Height）
+		for (auto TheField : TheGardener.getRefCompoundField())
+		{
+			for (int i = 0;i < ScreenWidth * ScreenHeight;++i) 
+			{
+				TheField->getRefMediumLayer()[i].Vibrate(TimeOfNow);
+			}
+		}
 
+		//Monitor处理各Medium层的叠加
+		TheMonitor.UpdateCompoundHeight(TheGardener.getCompoundMedium());
+
+		//Monitor将Height转化为字符
+		TheMonitor.ChangeIntoPixel(TheScreenManager.getRefScreenBuffer(),TheMonitor.getCompoundHeight());
+
+		//Monitor加上PlantingPoint的显示
+		TheMonitor.AddPlantingPoint(TheScreenManager.getRefScreenBuffer(), TheGardener.getPlantingPoint());
+
+		TheScreenManager.ShowPixel();
+
+		// 控制帧率
+		if (ElapsedTime < FrameTime)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - int(ElapsedTime)));
+		}
 	}
 }
 
