@@ -9,6 +9,7 @@ class Gardener
 public:
 	Gardener();
 	Point getPlantingPoint()const;
+	std::vector<Field*> getCompoundField()const;
 	void SelectPosition();//操控光标（或者一个记号）到所希望的位置
 	void PlantIt(const double& timeOfNow);//在选定位置，“种下”一个场源
 	void AdjustAmplitude();//如果在选定位置已经存在场源，那么改变它的参数; 这两个函数放在PlantIt里面
@@ -18,7 +19,6 @@ private:
 	std::vector <Field*> CompoundField;//由所有场叠加而成的复合场
 	std::vector<Medium[ScreenWidth * ScreenHeight]> CompoundMedium;//创建由所有场对应介质层叠加而成的复合介质
 	Point PlantingPoint;
-	bool IfKeyPressed[6];//共六个键WSADJK：WSAD，用来控制种植点移动；JK，在没有种植的点上种下，两种可选择的场；JKSW，在种植过的点上调节参数；
 };
 
 #endif // GARDENER_H

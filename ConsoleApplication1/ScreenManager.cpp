@@ -1,6 +1,6 @@
 #include "ScreenManager.h"
 
-void ScreenManger::ShowPixel()
+void ScreenManager::ShowPixel()
 {
 	int corScreenWidth = 2 * ScreenWidth; //ÐÞÕýÆÁÄ»¿í¶È
 	for (int i = 0;i < ScreenBuffer.size();++i) {
@@ -12,12 +12,12 @@ void ScreenManger::ShowPixel()
 	}
 }
 
-void ScreenManger::SetEmptyBuffer()
+void ScreenManager::SetEmptyBuffer()
 {
 	ScreenBuffer.clear();
 }
 
-void ScreenManger::ScreenClear()
+void ScreenManager::ScreenClear()
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD coordScreen = { 0, 0 };

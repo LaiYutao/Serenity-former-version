@@ -13,7 +13,7 @@
 #define FrameTime 16 //单位为毫秒
 #define GrayScale 13//灰度阶阶数，直接影响细腻程度
 
-class ScreenManger
+class ScreenManager
 {
 public:
     void ShowPixel();//修正的屏幕参数：因为横向单位输出两个字符，平衡高和宽

@@ -8,15 +8,16 @@ Gardener::Gardener():PlantingPoint(Point(0,0))
 		SourceChecking[i] =0;
 	}
 
-	for (int i = 0;i < 6;++i)//只使用六个按键
-	{
-		IfKeyPressed[i] = false;
-	}
 }
 
 Point Gardener::getPlantingPoint() const
 {
 	return PlantingPoint;
+}
+
+std::vector<Field*> Gardener::getCompoundField() const
+{
+	return CompoundField;
 }
 
 void Gardener::SelectPosition()
