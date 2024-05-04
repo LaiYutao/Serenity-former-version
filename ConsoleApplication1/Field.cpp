@@ -3,9 +3,33 @@
 Field::Field(const double& creationTime, const Point& s_Position,const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed)
     : CreationTime(creationTime),SourcePosition(s_Position), SourceAmplitude(s_Amplitude), SourceFrequency(s_Frequency), SourceInitialPhase(s_InitialPhase), SourceSpeed(s_Speed)
 {
+    //初始化MediumLayer：MediumLayer中每个Medium接收Field的创建时间
     for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
     {
-        MediumLayer[i] = Medium(this->getCreationTime());//显式初始化为0
+        MediumLayer[i] = Medium(this->getCreationTime());
+        IfActivated[i] = false;
+    }
+
+    //初始化RayTip：以Source坐标为所有RayTip的初始坐标，并分配初始方向，初始距离为0
+    for (int i = 0;i < NumberOfRay;++i)
+    {
+        double DirectionAngle = i * (2 * PI / NumberOfRay);
+        BunchOfRayTips[i] = RayTip(SourcePosition.getXPos(), SourcePosition.getYPos(), DirectionAngle, 0);
+    }
+}
+
+//将IfIfActivated和RayTip重置为初始状态
+void Field::ClearIfActivated()
+{
+    for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
+    {
+        IfActivated[i] = false;
+    }
+
+    for (int i = 0;i < NumberOfRay;++i)
+    {
+        double DirectionAngle = i * (2 * PI / NumberOfRay);
+        BunchOfRayTips[i] = RayTip(SourcePosition.getXPos(), SourcePosition.getYPos(), DirectionAngle, 0);
     }
 }
 
@@ -34,7 +58,7 @@ double Field::getSourceInitialPhase() const
     return SourceInitialPhase;
 }
 
-int Field::getSourceSpeed() const 
+double Field::getSourceSpeed() const 
 {
     return SourceSpeed;
 }

@@ -3,6 +3,7 @@
 #include"Point.h"
 #include"ScreenManager.h"
 #include"Medium.h"
+#include"RayTip.h"
 #include<chrono>
 #include<cmath>
 
@@ -20,7 +21,7 @@ public:
 	double getSourceAmplitude() const;
 	double getSourceFrequency() const;
 	double getSourceInitialPhase() const;
-	int getSourceSpeed() const;
+	double getSourceSpeed() const;
 	void setSourcePosition(const Point& sourcePosition);
 	void setSourceAmplitude(const double& s_Amplitude);
 	void setSourceFrequency(const double &s_Frequency);
@@ -28,6 +29,9 @@ public:
 	void setSourceSpeed(const int& s_Speed);
 
 protected:
+	static const int NumberOfRay = (ScreenWidth + ScreenHeight) * 2 - 4;//屏幕最外圈点的个数，作为发出光线的数量
+	bool IfActivated[ScreenWidth * ScreenHeight];
+	RayTip BunchOfRayTips[NumberOfRay];
 	Medium MediumLayer[ScreenWidth * ScreenHeight];
 
 private:
@@ -36,6 +40,6 @@ private:
 	double SourceInitialPhase;
 	double SourceFrequency;
 	double SourceAmplitude;
-	int SourceSpeed;
+	double SourceSpeed;
 };
 #endif // FIELD_H

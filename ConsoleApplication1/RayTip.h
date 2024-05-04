@@ -6,7 +6,7 @@ class RayTip : public Point
 {
 public:
 	RayTip();//用于创建RayTip数组
-	RayTip(double xPos, double yPos,double directionAngle=0, double distanceToSource=0);
+	RayTip(double xPos, double yPos,double directionAngle, double distanceToSource=0);
 	virtual ~RayTip() {};
 	
 	double getDirectionAngle()const;

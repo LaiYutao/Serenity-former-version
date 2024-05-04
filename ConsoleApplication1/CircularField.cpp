@@ -3,37 +3,13 @@
 #include"Medium.h"
 #include"RayTip.h"
 
-CircularField::CircularField(const double& creationTime,const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed)
+CircularField::CircularField(const double& creationTime,const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const double& s_Speed)
 	:Field(creationTime,s_Position, s_Amplitude, s_Frequency, s_InitialPhase, s_Speed)
 {
 }
 
 void CircularField::ActivateMedium(const double& timeOfNow, const double& frameTime)
 {
-	static const int NumberOfRay = (ScreenWidth + ScreenHeight) * 2 - 4;//屏幕最外圈点的个数，作为发出光线的数量
-	
-	static bool IfActivated[ScreenWidth*ScreenHeight];
-	static bool IfActivated_initialized = false;//避免多次初始化数组
-	if (!IfActivated_initialized) 
-	{
-		for (int i = 0;i < ScreenWidth * ScreenHeight;++i) 
-		{
-			IfActivated[i] = false;
-		}
-		IfActivated_initialized = true;
-	}
-	
-	//所有的射线尖端构成一个数组,并初始化
-	static RayTip BunchOfRayTips[NumberOfRay];
-	static bool BunchOfRayTips_initialized = false;
-	if (!BunchOfRayTips_initialized) 
-	{
-		for (int i = 0;i < NumberOfRay;++i) 
-		{
-			double DirectionAngle = i * (2 * PI / NumberOfRay);
-			BunchOfRayTips[i] = RayTip(getSourcePosition().getXPos(), getSourcePosition().getYPos(), DirectionAngle,0.0f);
-		}
-	}
 
 	//如果每个Medium点都已经被激活，就不再进行激活的常规操作
 	static bool StopActivation = false;
@@ -55,6 +31,14 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 
 	//以下是激活还未完成时的正常步骤：
 	
+	//将source处直接激活
+	if (!IfActivated[int(getSourcePosition().getYPos() * ScreenWidth + getSourcePosition().getXPos())])
+	{
+		MediumLayer[int(getSourcePosition().getYPos() * ScreenWidth + getSourcePosition().getXPos())].GetActivated(timeOfNow, this->getSourceAmplitude(), this->getSourceFrequency(), this->getSourceInitialPhase());
+		IfActivated[int(getSourcePosition().getYPos() * ScreenWidth + getSourcePosition().getXPos())] = true;
+		Sleep(int(1000 / getSourceSpeed()));//等待传播时间，以免周围离波源最近一圈的点也立即被激活
+	}
+
 	//遍历每一条射线
 	for (int i = 0;i < NumberOfRay;++i) 
 	{

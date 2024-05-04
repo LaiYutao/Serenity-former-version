@@ -7,8 +7,11 @@
 #include <string>
 #include <fstream>
 #include <cmath>
+#include<thread>
 #define ScreenWidth 600
 #define ScreenHeight 150
+#define FrameTime 16 //单位为毫秒
+#define GrayScale 13//灰度阶阶数，直接影响细腻程度
 
 class ScreenManger
 {

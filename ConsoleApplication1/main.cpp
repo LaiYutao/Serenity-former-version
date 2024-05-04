@@ -12,7 +12,6 @@
 //包含主loop在内的主干
 void Act(ScreenManger screenManager)
 {
-	const int kFrameTime = 16;// 每帧时长为16毫秒，帧率为60fps
 	//设定时间原点
 	double TimeOrigin = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 	auto tp1 = std::chrono::high_resolution_clock::now();
