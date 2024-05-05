@@ -7,7 +7,6 @@ CircularField::CircularField(const double& creationTime,const Point& s_Position,
 
 void CircularField::ActivateMedium(const double& timeOfNow, const double& frameTime)
 {
-
 	//如果每个Medium点都已经被激活，就不再进行激活的常规操作
 	static bool StopActivation = false;
 	if (StopActivation == true)return;//只要在一次GameLoop中，Medium全部都已激活，那么后续所有循环中，都是如此
