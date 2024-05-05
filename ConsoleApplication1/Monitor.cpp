@@ -2,10 +2,7 @@
 
 Monitor::Monitor()
 {
-	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
-	{
-		CompoundHeight.push_back(0);
-	}
+	CompoundHeight.resize(ScreenWidth * ScreenHeight, 0);
 }
 
 std::vector<double> Monitor::getCompoundHeight() const

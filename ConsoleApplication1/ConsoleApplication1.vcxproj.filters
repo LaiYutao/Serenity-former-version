@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test0.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Monitor.h">
       <Filter>头文件</Filter>
     </ClCompile>
@@ -46,6 +43,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Gardener.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SpiralField.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

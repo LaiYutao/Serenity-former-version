@@ -11,7 +11,7 @@
 class Field 
 {
 public:
-	Field(const double& creationTime, const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const int& s_Speed);
+	Field(const double& creationTime, const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const double& s_Speed);
 	virtual ~Field() {}; //对于刚开始振动的点（包括波源，和首次被激发的Medium），初相位常数φ似乎顶多是用于判断是下一时刻先向下还是先向上的，并作为cos和sin之间的转化（±π/2），因为必然是从0开始震动的
 	                     //Field的初相位参量，指的是波源处振动方程的初相位，只能为π/2（下一刻向下振动），或者-π/2（下一刻向上振动）；
 	

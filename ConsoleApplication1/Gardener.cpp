@@ -77,22 +77,28 @@ void Gardener::PlantIt(const double& timeOfNow)
 		}
 		else if ((GetAsyncKeyState((unsigned short)'K') & 0x8000)&& !KeyKPressed)
 		{
-			//SpiralField 有待实现
-			//CompoundField.push_back(new SpiralField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
-			//SourceChecking[(int(PlantingPoint.getYPos()) * ScreenHeight + int(PlantingPoint.getXPos()))] = true;
+			CompoundField.push_back(new SpiralField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
+			CompoundMedium.push_back(CompoundField[-1]->getRefMediumLayer());
+			SourceChecking[(int(PlantingPoint.getYPos()) * ScreenHeight + int(PlantingPoint.getXPos()))] = true;
 			KeyKPressed = true;
 		}
 		else return;
 	}
 	else //如果此处已经种下过Source
 	{
-		if ((GetAsyncKeyState((unsigned short)'J') & 0x8000)&&!KeyJPressed)
+		if (GetAsyncKeyState((unsigned short)'J') & 0x8000)
 		{
-			AdjustAmplitude();//按紧“J”键，就进入对Amplitude的调节；松开就结束调节
+			if (!KeyJPressed)
+			{
+				AdjustAmplitude();//按紧“J”键，就进入对Amplitude的调节；松开就结束调节
+			}
 		}
-		else if ((GetAsyncKeyState((unsigned short)'K') & 0x8000)&&!KeyKPressed)
+		else if (GetAsyncKeyState((unsigned short)'K') & 0x8000)
 		{
-			AdjustFrequency();//按紧“K”键，就进入对Amplitude的调节；松开就结束调节；
+			if(!KeyKPressed)
+			{
+				AdjustFrequency();//按紧“K”键，就进入对Amplitude的调节；松开就结束调节；
+			}
 		}
 		else
 		{

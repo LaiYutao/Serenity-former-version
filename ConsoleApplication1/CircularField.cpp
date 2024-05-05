@@ -1,7 +1,4 @@
 #include"CircularField.h"
-#include"ScreenManager.h"
-#include"Medium.h"
-#include"RayTip.h"
 
 CircularField::CircularField(const double& creationTime,const Point& s_Position, const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const double& s_Speed)
 	:Field(creationTime,s_Position, s_Amplitude, s_Frequency, s_InitialPhase, s_Speed)
@@ -42,7 +39,7 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 	//遍历每一条射线
 	for (int i = 0;i < NumberOfRay;++i) 
 	{
-		BunchOfRayTips[i].setDistanceToSource(BunchOfRayTips[i].getDistanceToSource() + this->getSourceSpeed() * frameTime);
+		BunchOfRayTips[i].setDistanceToSource(BunchOfRayTips[i].getDistanceToSource() + this->getSourceSpeed() * frameTime/1000);
 		double newXPos = getSourcePosition().getXPos() + BunchOfRayTips[i].getDistanceToSource() * cos(BunchOfRayTips[i].getDirectionAngle());
 		BunchOfRayTips[i].setXPos(newXPos);
 		double newYPos = getSourcePosition().getYPos() + BunchOfRayTips[i].getDistanceToSource() * sin(BunchOfRayTips[i].getDirectionAngle());

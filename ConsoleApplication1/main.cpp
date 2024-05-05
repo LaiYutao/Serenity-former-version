@@ -18,6 +18,12 @@ void Act(ScreenManager TheScreenManager)
 
 	Gardener TheGardener;
 	Monitor TheMonitor;
+
+	char* screen = new char[2*ScreenWidth * ScreenHeight];
+	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
+	SetConsoleActiveScreenBuffer(hConsole);
+	DWORD dwBytesWritten = 0;
+
 	//主循环
 	while (1) 
 	{
@@ -27,10 +33,16 @@ void Act(ScreenManager TheScreenManager)
 		tp1 = tp2;
 		double ElapsedTime = elapsedTime.count();
 
+		//std::thread ScreenShow(&ScreenManager::ShowPixel,&TheScreenManager);
+		//ScreenShow.join();
+
 		//获取时间轴中当前时间
 		double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
 		
+		//启动PlantingPoint的选择
 		TheGardener.SelectPosition();
+
+		//启动“种植”功能
 		TheGardener.PlantIt(TimeOfNow);
 
 		//遍历CompoundField中的每一个场,让每个场开始在对应Medium层中对四周的Medium进行激活
@@ -57,12 +69,17 @@ void Act(ScreenManager TheScreenManager)
 		//Monitor加上PlantingPoint的显示
 		TheMonitor.AddPlantingPoint(TheScreenManager.getRefScreenBuffer(), TheGardener.getPlantingPoint());
 
-		TheScreenManager.ShowPixel();
+		for (int i = 0;i < 2 * ScreenWidth * ScreenHeight;++i)
+		{
+			screen[i] = TheScreenManager.getScreenBuffer()[i];
+		}
 
+		WriteConsoleOutputCharacterA(hConsole, screen, 2*ScreenWidth * ScreenHeight, { 0,0 }, &dwBytesWritten);
+		TheScreenManager.SetEmptyBuffer();
 		// 控制帧率
 		if (ElapsedTime < FrameTime)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - int(ElapsedTime)));
+			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - int(1000*ElapsedTime)));
 		}
 	}
 }

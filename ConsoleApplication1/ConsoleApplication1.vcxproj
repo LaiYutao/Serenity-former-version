@@ -137,8 +137,8 @@
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="RayTip.cpp" />
     <ClCompile Include="ScreenManager.cpp" />
-    <ClCompile Include="test0.cpp" />
     <ClCompile Include="Monitor.h" />
+    <ClCompile Include="SpiralField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CircularField.h" />
