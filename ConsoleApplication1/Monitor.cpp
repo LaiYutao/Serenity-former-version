@@ -12,6 +12,9 @@ std::vector<double> Monitor::getCompoundHeight() const
 
 void Monitor::UpdateCompoundHeight(const std::vector<std::vector<Medium>>& compoundMedium)
 {
+	//先进行重置
+	CompoundHeight.resize(ScreenWidth * ScreenHeight, 0);
+
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
 		for (auto mediumLayer : compoundMedium)
@@ -50,6 +53,6 @@ void Monitor::ChangeIntoPixel(std::vector<char>& buffer, std::vector<double> com
 void Monitor::AddPlantingPoint(std::vector<char>& buffer, const Point& plantingPoint)
 {
 	//用“<>”来显示PlantingPoint的位置
-	buffer[2 * (int(plantingPoint.getYPos()) * ScreenHeight + int(plantingPoint.getXPos()))] = '<';
-	buffer[2 * (int(plantingPoint.getYPos()) * ScreenHeight + int(plantingPoint.getXPos())) + 1] = '>';
+	buffer[2 * (int(plantingPoint.getYPos()) * ScreenWidth + int(plantingPoint.getXPos()))] = '<';
+	buffer[2 * (int(plantingPoint.getYPos()) * ScreenWidth + int(plantingPoint.getXPos())) + 1] = '>';
 }

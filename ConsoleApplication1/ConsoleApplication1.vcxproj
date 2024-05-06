@@ -139,6 +139,7 @@
     <ClCompile Include="ScreenManager.cpp" />
     <ClCompile Include="Monitor.h" />
     <ClCompile Include="SpiralField.cpp" />
+    <ClCompile Include="TestCalculationAndOutput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CircularField.h" />

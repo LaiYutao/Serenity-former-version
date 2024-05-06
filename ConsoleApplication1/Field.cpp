@@ -3,6 +3,8 @@
 Field::Field(const double& creationTime, const Point& s_Position,const double& s_Amplitude, const double& s_Frequency, const double& s_InitialPhase, const double& s_Speed)
     : CreationTime(creationTime),SourcePosition(s_Position), SourceAmplitude(s_Amplitude), SourceFrequency(s_Frequency), SourceInitialPhase(s_InitialPhase), SourceSpeed(s_Speed)
 {
+    StopActivation = false;
+
     //初始化MediumLayer：MediumLayer中每个Medium接收Field的创建时间
     MediumLayer.resize(ScreenWidth * ScreenHeight);
     for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
@@ -22,6 +24,8 @@ Field::Field(const double& creationTime, const Point& s_Position,const double& s
 //将IfIfActivated和RayTip重置为初始状态
 void Field::ClearIfActivated()
 {
+    StopActivation = false;
+
     for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
     {
         IfActivated[i] = false;

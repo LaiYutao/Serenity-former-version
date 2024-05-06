@@ -8,8 +8,7 @@ CircularField::CircularField(const double& creationTime,const Point& s_Position,
 void CircularField::ActivateMedium(const double& timeOfNow, const double& frameTime)
 {
 	//如果每个Medium点都已经被激活，就不再进行激活的常规操作
-	static bool StopActivation = false;
-	if (StopActivation == true)return;//只要在一次GameLoop中，Medium全部都已激活，那么后续所有循环中，都是如此
+	if (StopActivation == true)return;//只要在一次GameLoop中，Medium全部都已激活，那么只要参数没有改变，后续所有循环中，都不用再激活
 	
 	bool CheckActivation = true;
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i) 
@@ -44,8 +43,8 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		double newYPos = getSourcePosition().getYPos() + BunchOfRayTips[i].getDistanceToSource() * sin(BunchOfRayTips[i].getDirectionAngle());
 		BunchOfRayTips[i].setYPos(newYPos);
 		
-		//判断Medium是否被激活过(将RayTip的坐标向上取整，就是所击中的MediumPixel的坐标)，如果没有，就将其激活
-		int MediumPixelIndex = ScreenWidth * int(BunchOfRayTips[i].getYPos()-1) + int(BunchOfRayTips[i].getXPos()-1);
+		//判断Medium是否被激活过(将RayTip的坐标取整，就是所击中的MediumPixel的坐标)，如果没有，就将其激活
+		int MediumPixelIndex = ScreenWidth * int(BunchOfRayTips[i].getYPos()) + int(BunchOfRayTips[i].getXPos());
 		if (!IfActivated[MediumPixelIndex])
 		{
 			MediumLayer[MediumPixelIndex].GetActivated(timeOfNow,this->getSourceAmplitude(),this->getSourceFrequency(),this->getSourceInitialPhase());

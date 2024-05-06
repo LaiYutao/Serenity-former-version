@@ -32,6 +32,7 @@ public:
 	void setSourceSpeed(const int& s_Speed);
 
 protected:
+	bool StopActivation;
 	static const int NumberOfRay = (ScreenWidth + ScreenHeight) * 2 - 4;//屏幕最外圈点的个数，作为发出光线的数量
 	bool IfActivated[ScreenWidth * ScreenHeight];
 	RayTip BunchOfRayTips[NumberOfRay];

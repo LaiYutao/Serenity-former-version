@@ -1,7 +1,7 @@
 #include"ScreenManager.h"
 #include"Monitor.h"
-#include"DiscJockey.h"
 #include"Gardener.h"
+#include"DiscJockey.h"
 #include"CircularField.h"
 #include"SpiralField.h"
 #include"Medium.h"
@@ -9,7 +9,7 @@
 #include<thread>
 
 //包含主loop在内的主干
-void Act(ScreenManager TheScreenManager)
+void ActTest01(ScreenManager TheScreenManager)
 {
 	//设定时间原点
 	double TimeOrigin = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
@@ -19,13 +19,18 @@ void Act(ScreenManager TheScreenManager)
 	Gardener TheGardener;
 	Monitor TheMonitor;
 
-	char* screen = new char[2*ScreenWidth * ScreenHeight];
+	char* screen = new char[2 * ScreenWidth * ScreenHeight];
 	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
 	SetConsoleActiveScreenBuffer(hConsole);
 	DWORD dwBytesWritten = 0;
 
+	//创建场
+	CircularField CF(0, Point(ScreenWidth / 2, ScreenHeight/2), 2, 0.25, PI / 2, 3);
+	std::vector<std::vector<Medium>> compoundMedium;
+	compoundMedium.push_back(CF.getRefMediumLayer());
+	
 	//主循环
-	while (1) 
+	while (1)
 	{
 		//获取ElapsedTime
 		tp2 = std::chrono::high_resolution_clock::now();
@@ -38,33 +43,23 @@ void Act(ScreenManager TheScreenManager)
 
 		//获取时间轴中当前时间
 		double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
-		std::cout << TimeOfNow;
-		//启动PlantingPoint的选择
+
 		TheGardener.SelectPosition();
 
-		//启动“种植”功能
-		TheGardener.PlantIt(TimeOfNow);
+		//激活
+		CF.ActivateMedium(TimeOfNow, FrameTime);
 
-		//遍历CompoundField中的每一个场,让每个场开始在对应Medium层中对四周的Medium进行激活
-		for (auto TheField : TheGardener.getRefCompoundField())
+		//振动（改变Height）
+		for(int i=0;i<ScreenWidth*ScreenHeight;++i)
 		{
-			TheField->ActivateMedium(TimeOfNow, FrameTime);
-		}
-		
-		//让每个场对应的Medium层的Medium都振动（改变Height）
-		for (auto TheField : TheGardener.getRefCompoundField())
-		{
-			for (int i = 0;i < ScreenWidth * ScreenHeight;++i) 
-			{
-				TheField->getRefMediumLayer()[i].Vibrate(TimeOfNow);
-			}
+			CF.getRefMediumLayer()[i].Vibrate(TimeOfNow);
 		}
 
 		//Monitor处理各Medium层的叠加
-		TheMonitor.UpdateCompoundHeight(TheGardener.getCompoundMedium());
+		TheMonitor.UpdateCompoundHeight(compoundMedium);
 
 		//Monitor将Height转化为字符
-		TheMonitor.ChangeIntoPixel(TheScreenManager.getRefScreenBuffer(),TheMonitor.getCompoundHeight());
+		TheMonitor.ChangeIntoPixel(TheScreenManager.getRefScreenBuffer(), TheMonitor.getCompoundHeight());
 
 		//Monitor加上PlantingPoint的显示
 		TheMonitor.AddPlantingPoint(TheScreenManager.getRefScreenBuffer(), TheGardener.getPlantingPoint());
@@ -74,19 +69,19 @@ void Act(ScreenManager TheScreenManager)
 			screen[i] = TheScreenManager.getScreenBuffer()[i];
 		}
 
-		WriteConsoleOutputCharacterA(hConsole, screen, 2*ScreenWidth * ScreenHeight, { 0,0 }, &dwBytesWritten);
+		WriteConsoleOutputCharacterA(hConsole, screen, 2 * ScreenWidth * ScreenHeight, { 0,0 }, &dwBytesWritten);
 		TheScreenManager.SetEmptyBuffer();
 		// 控制帧率
 		if (ElapsedTime < FrameTime)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - int(1000*ElapsedTime)));
+			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - int(1000 * ElapsedTime)));
 		}
 	}
 }
 
-int main() 
-{
-	ScreenManager TheScreenManager;
-	Act(TheScreenManager);
-	return 0;
-}
+//int main()
+//{
+//	ScreenManager TheScreenManager;
+//	ActTest01(TheScreenManager);
+//	return 0;
+//}
