@@ -13,6 +13,7 @@ std::vector<double> Monitor::getCompoundHeight() const
 void Monitor::UpdateCompoundHeight(const std::vector<std::vector<Medium>>& compoundMedium)
 {
 	//先进行重置
+	CompoundHeight.clear();
 	CompoundHeight.resize(ScreenWidth * ScreenHeight, 0);
 
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)

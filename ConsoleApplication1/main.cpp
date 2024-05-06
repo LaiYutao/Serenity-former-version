@@ -38,7 +38,6 @@ void Act(ScreenManager TheScreenManager)
 
 		//获取时间轴中当前时间
 		double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
-		std::cout << TimeOfNow;
 		//启动PlantingPoint的选择
 		TheGardener.SelectPosition();
 
