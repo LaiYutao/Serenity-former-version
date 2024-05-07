@@ -30,9 +30,8 @@ void ActTest01(ScreenManager TheScreenManager)
 	{
 		//获取ElapsedTime
 		tp2 = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> elapsedTime = tp2 - tp1;
+		auto ElapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(tp2 - tp1).count();
 		tp1 = tp2;
-		double ElapsedTime = elapsedTime.count();
 
 		//std::thread ScreenShow(&ScreenManager::ShowPixel,&TheScreenManager);
 		//ScreenShow.join();
@@ -70,7 +69,7 @@ void ActTest01(ScreenManager TheScreenManager)
 		// 控制帧率
 		if (ElapsedTime < FrameTime)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - int(1000 * ElapsedTime)));
+			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - ElapsedTime));
 		}
 	}
 }

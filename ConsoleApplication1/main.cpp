@@ -25,9 +25,8 @@ void Act(ScreenManager TheScreenManager)
 	{
 		//获取ElapsedTime
 		tp2 = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> elapsedTime = tp2 - tp1;
+		auto ElapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(tp2 - tp1).count();
 		tp1 = tp2;
-		double ElapsedTime = elapsedTime.count();
 
 		//std::thread ScreenShow(&ScreenManager::ShowPixel,&TheScreenManager);
 		//ScreenShow.join();
@@ -43,7 +42,7 @@ void Act(ScreenManager TheScreenManager)
 		//遍历CompoundField中的每一个场,让每个场开始在对应Medium层中对四周的Medium进行激活
 		for (auto TheField : TheGardener.getRefCompoundField())
 		{
-			TheField->ActivateMedium(TimeOfNow, FrameTime);
+			TheField->ActivateMedium(TimeOfNow, double(FrameTime)/1000);
 		}
 		
 		//让每个场对应的Medium层的Medium都振动（改变Height）
@@ -74,7 +73,7 @@ void Act(ScreenManager TheScreenManager)
 		// 控制帧率
 		if (ElapsedTime < FrameTime)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - int(1000*ElapsedTime)));
+			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - ElapsedTime));
 		}
 	}
 }

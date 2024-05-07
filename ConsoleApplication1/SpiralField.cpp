@@ -31,7 +31,7 @@ void SpiralField::ActivateMedium(const double& timeOfNow, const double& frameTim
 	//遍历每一条射线
 	for (int i = 0;i < NumberOfRay;++i)
 	{
-		BunchOfRayTips[i].setDistanceToSource(BunchOfRayTips[i].getDistanceToSource() + this->getSourceSpeed() * frameTime/1000);
+		BunchOfRayTips[i].setDistanceToSource(BunchOfRayTips[i].getDistanceToSource() + this->getSourceSpeed() * frameTime);
 		double newXPos = getSourcePosition().getXPos() + BunchOfRayTips[i].getDistanceToSource() * cos(BunchOfRayTips[i].getDirectionAngle());
 		BunchOfRayTips[i].setXPos(newXPos);
 		double newYPos = getSourcePosition().getYPos() + BunchOfRayTips[i].getDistanceToSource() * sin(BunchOfRayTips[i].getDirectionAngle());
