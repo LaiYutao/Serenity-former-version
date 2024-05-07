@@ -50,7 +50,7 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		double Y = BunchOfRayTips[i].getYPos();
 		int LessX = int(X);//向下取X，作为判断基准点X坐标
 		int LessY = int(Y);//向下取Y，作为判断基准点Y坐标
-		int ActX = 0;
+		int ActX = 0;//只是防止杂乱而进行的初始化，‘0’没有特殊含义
 		int ActY = 0;//如果达到激活条件的话，就存储对应坐标
 		for (int x = LessX;x < LessX + 2;x++) 
 		{
