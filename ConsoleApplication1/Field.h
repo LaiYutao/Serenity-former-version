@@ -33,7 +33,7 @@ public:
 
 protected:
 	bool StopActivation;
-	static const int NumberOfRay = (ScreenWidth + ScreenHeight) * 2 - 4;//屏幕最外圈点的个数，作为发出光线的数量
+	static const int NumberOfRay = (ScreenWidth + ScreenHeight) * 2 - 4;//最外圈点的个数，作为发出光线的数量（是一个未经严格检验的假设）
 	bool IfActivated[ScreenWidth * ScreenHeight];
 	RayTip BunchOfRayTips[NumberOfRay];
 	std::vector<Medium> MediumLayer;

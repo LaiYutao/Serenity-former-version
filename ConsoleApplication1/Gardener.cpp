@@ -36,7 +36,7 @@ void Gardener::SelectPosition()
 	}
 
 	//向下: 按下“S”，且不超界，且此时没有按着“J”和“K”；
-	if ((GetAsyncKeyState((unsigned short)'S') & 0x8000) && (PlantingPoint.getYPos() < ScreenHeight) && !(GetAsyncKeyState((unsigned short)'J') & 0x8000) && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
+	if ((GetAsyncKeyState((unsigned short)'S') & 0x8000) && (PlantingPoint.getYPos() < ScreenHeight-1) && !(GetAsyncKeyState((unsigned short)'J') & 0x8000) && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
 	{
 		PlantingPoint.setYPos(PlantingPoint.getYPos() + MovingSpeed * FrameTime / 1000);
 	}
@@ -48,7 +48,7 @@ void Gardener::SelectPosition()
 	}
 
 	//向右：按下“D”，且不超界，且此时没有按着“J”和“K”；
-	if ((GetAsyncKeyState((unsigned short)'D') & 0x8000) && (PlantingPoint.getXPos() < ScreenWidth) && !(GetAsyncKeyState((unsigned short)'J') & 0x8000) && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
+	if ((GetAsyncKeyState((unsigned short)'D') & 0x8000) && (PlantingPoint.getXPos() < ScreenWidth-1) && !(GetAsyncKeyState((unsigned short)'J') & 0x8000) && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
 	{
 		PlantingPoint.setXPos(PlantingPoint.getXPos() + MovingSpeed * FrameTime / 1000);
 	}
@@ -114,6 +114,12 @@ void Gardener::AdjustAmplitude()
 	static bool KeySPressed = false;
 	static double AmplitudeUpperLimit = (GrayScale - 1) / 2;//不能太高，否则效果不好
 	
+	//测试：防止负索引(虽然正常情况下，一定是要SourceChecking为正，才能有机会触发这个函数)
+	if (SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))] == 0)
+	{
+		return;
+	}
+	
 	//对应CompoundField中的编号，从0开始；
 	int NumField = SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))]-1;
 	
@@ -132,7 +138,7 @@ void Gardener::AdjustAmplitude()
 		KeyWPressed = false;
 	}
 
-	//按下“S”，把振幅调高；但不能低于0
+	//按下“S”，把振幅调低；但不能低于0
 	if ((GetAsyncKeyState((unsigned short)'S') & 0x8000) && (CompoundField[NumField]->getSourceAmplitude() >0))
 	{
 		if (!KeySPressed) //防止按键连续
@@ -154,6 +160,12 @@ void Gardener::AdjustFrequency()
 	static bool KeySPressed = false;
 	static double FrequencyUpperLimit = 1;//太快的话，显示不清楚
 
+	//测试：防止负索引(虽然正常情况下，一定是要SourceChecking为正，才能有机会触发这个函数)
+	if (SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))] == 0)
+	{
+		return;
+	}
+	
 	//对应CompoundField中的编号，从0开始；
 	int NumField = SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))] - 1;
 
@@ -172,7 +184,7 @@ void Gardener::AdjustFrequency()
 		KeyWPressed = false;
 	}
 
-	//按下“S”，把频率调高；但不能低于0
+	//按下“S”，把频率调低；但不能低于0
 	if ((GetAsyncKeyState((unsigned short)'S') & 0x8000) && (CompoundField[NumField]->getSourceFrequency() > 0))
 	{
 		if (!KeySPressed) //防止按键连续
