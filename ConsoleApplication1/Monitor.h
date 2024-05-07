@@ -8,7 +8,6 @@ class Monitor
 {
 public:
     Monitor();
-    
     std::vector<double> getCompoundHeight()const;
     void UpdateCompoundHeight(const std::vector<std::vector<Medium>>& compoundMedium);
     void ChangeIntoPixel(std::vector<char>& buffer,std::vector<double> compoundHeight);//接受每个Medium的Height,然后映射到对应字符。

@@ -1,10 +1,6 @@
-#include"ScreenManager.h"
 #include"Monitor.h"
 #include"Gardener.h"
 #include"DiscJockey.h"
-#include"CircularField.h"
-#include"SpiralField.h"
-#include"Medium.h"
 #include<chrono>
 #include<thread>
 

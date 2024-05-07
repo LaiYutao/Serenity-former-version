@@ -18,7 +18,7 @@ void Monitor::UpdateCompoundHeight(const std::vector<std::vector<Medium>>& compo
 
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
-		for (auto mediumLayer : compoundMedium)
+		for (std::vector<Medium> mediumLayer : compoundMedium)
 		{
 			//把各Medium层的Height叠加起来
 			CompoundHeight[i] += mediumLayer[i].getHeight();
