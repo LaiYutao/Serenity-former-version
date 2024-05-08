@@ -45,15 +45,37 @@ void Monitor::ChangeIntoPixel(std::vector<char>& buffer)
 		}
 		else
 		{
-			buffer.push_back(" .,:-+o*#%&$@"[ShownHeight + Offset]);
-			buffer.push_back(" .,:-+o*#%&$@"[ShownHeight + Offset]);
+			buffer.push_back(" .,:;*oH%#&$@"[ShownHeight + Offset]);
+			buffer.push_back(" .,:;*oH%#&$@"[ShownHeight + Offset]);
 		}
 	}
 }
 
 void Monitor::AddPlantingPoint(std::vector<char>& buffer, const Point& plantingPoint)
 {
+	//定位器：取离得最近的点作为考虑位置（PlantingPoint在SelectPosition函数那里已经设置为不会越界的了）
+	double PickRadius = 0.5;
+	double X = plantingPoint.getXPos();
+	double Y = plantingPoint.getYPos();
+	int LessX = int(X);//向下取X，作为判断基准点X坐标
+	int LessY = int(Y);//向下取Y，作为判断基准点Y坐标
+	int PlantX = int(X);
+	int PlantY = int(Y);//先随便初始化
+	for (int x = LessX;x < LessX + 2;++x)
+	{
+		for (int y = LessY;y < LessY + 2;++y)
+		{
+			//位于捕捉半径内
+			if ((X - x) * (X - x) + (Y - y) * (Y - y) < PickRadius * PickRadius)
+			{
+				PlantX = x;
+				PlantY = y;
+				break;
+			}
+		}
+	}
+	
 	//用“<>”来显示PlantingPoint的位置
-	buffer[2 * (int(plantingPoint.getYPos()) * ScreenWidth + int(plantingPoint.getXPos()))] = '<';
-	buffer[2 * (int(plantingPoint.getYPos()) * ScreenWidth + int(plantingPoint.getXPos())) + 1] = '>';
+	buffer[2 * (PlantY * ScreenWidth + PlantX)] = '<';
+	buffer[2 * (PlantY * ScreenWidth + PlantX) + 1] = '>';
 }

@@ -44,7 +44,7 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		BunchOfRayTips[i].setYPos(newYPos);
 		
 		//定位器：判断是否到了可以激活Medium的情形（是否离整数点足够近；而不能单纯看向上还是向下取整）。如果符合条件，就给出判断坐标
-		double JudgeRadius = 0.4;
+		double JudgeRadius = 0.5;
 		bool Judger = false;
 		double X = BunchOfRayTips[i].getXPos();
 		double Y = BunchOfRayTips[i].getYPos();
@@ -62,7 +62,7 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 			for(int y=LessY;y<LessY+2;++y)
 			{
 				//位于激活半径内且不得越界
-				if (((X - x) * (X - x) + (Y - y) * (Y - y) <= JudgeRadius * JudgeRadius)&&((x>=0)&&(y>=0)&&(x<=ScreenWidth-1)&&(y<=ScreenHeight-1)))
+				if (((X - x) * (X - x) + (Y - y) * (Y - y) < JudgeRadius * JudgeRadius)&&((x>=0)&&(y>=0)&&(x<=ScreenWidth-1)&&(y<=ScreenHeight-1)))
 				{
 					ActX = x;
 					ActY = y;

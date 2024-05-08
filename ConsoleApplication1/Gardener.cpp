@@ -65,21 +65,43 @@ void Gardener::PlantIt(const double& timeOfNow)
 	static bool KeyJPressed = false;
 	static bool KeyKPressed = false;
 
+	//定位器：取离得最近的点作为考虑位置（PlantingPoint在SelectPosition函数那里已经设置为不会越界的了）
+	double PickRadius = 0.5;
+	double X = PlantingPoint.getXPos();
+	double Y = PlantingPoint.getYPos();
+	int LessX = int(X);//向下取X，作为判断基准点X坐标
+	int LessY = int(Y);//向下取Y，作为判断基准点Y坐标
+	int PlantX = int(X);
+	int PlantY = int(Y);//先随便初始化
+	for (int x = LessX;x < LessX + 2;++x)
+	{
+		for (int y = LessY;y < LessY + 2;++y)
+		{
+			//位于捕捉半径内
+			if ((X - x) * (X - x) + (Y - y) * (Y - y) < PickRadius * PickRadius)
+			{
+				PlantX = x;
+				PlantY = y;
+				break;
+			}
+		}
+	}
+
 	//如果此处没有种下过Source
-	if (SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))]==0)
+	if (SourceChecking[PlantY* ScreenWidth + PlantX]==0)
 	{
 		if ((GetAsyncKeyState((unsigned short)'J') & 0x8000)&& !KeyJPressed)
 		{
 			CompoundField.push_back(new CircularField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
 			CompoundMedium.push_back(CompoundField[CompoundField.size()-1]->getPtrMediumLayer());
-			SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))] = CompoundField.size();//记录此时创建的场的序号，从“1”开始
+			SourceChecking[PlantY * ScreenWidth + PlantX] = CompoundField.size();//记录此时创建的场的序号，从“1”开始
 			KeyJPressed = true;//防止刚创建就开始调节参数；而应该先放开一下，再考虑是否开始调节
 		}
 		else if ((GetAsyncKeyState((unsigned short)'K') & 0x8000)&& !KeyKPressed)
 		{
 			CompoundField.push_back(new SpiralField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
 			CompoundMedium.push_back(CompoundField[CompoundField.size() - 1]->getPtrMediumLayer());
-			SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))] = CompoundField.size();//记录此时创建的场的序号，从“1”开始
+			SourceChecking[PlantY * ScreenWidth + PlantX] = CompoundField.size();//记录此时创建的场的序号，从“1”开始
 			KeyKPressed = true;
 		}
 		else return;
@@ -90,14 +112,14 @@ void Gardener::PlantIt(const double& timeOfNow)
 		{
 			if (!KeyJPressed)
 			{
-				AdjustAmplitude();//按紧“J”键，就进入对Amplitude的调节；松开就结束调节
+				AdjustAmplitude(PlantX,PlantY);//按紧“J”键，就进入对Amplitude的调节；松开就结束调节
 			}
 		}
 		else if (GetAsyncKeyState((unsigned short)'K') & 0x8000)
 		{
 			if(!KeyKPressed)
 			{
-				AdjustFrequency();//按紧“K”键，就进入对Amplitude的调节；松开就结束调节；
+				AdjustFrequency(PlantX,PlantY);//按紧“K”键，就进入对Amplitude的调节；松开就结束调节；
 			}
 		}
 		else
@@ -108,20 +130,20 @@ void Gardener::PlantIt(const double& timeOfNow)
 	}
 }
 
-void Gardener::AdjustAmplitude()
+void Gardener::AdjustAmplitude(int plantX, int plantY)
 {
 	static bool KeyWPressed = false;
 	static bool KeySPressed = false;
 	static double AmplitudeUpperLimit = (GrayScale - 1) / 2;//不能太高，否则效果不好
 	
 	//测试：防止负索引(虽然正常情况下，一定是要SourceChecking为正，才能有机会触发这个函数)
-	if (SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))] == 0)
+	if (SourceChecking[plantY * ScreenWidth + plantX] == 0)
 	{
 		return;
 	}
 	
 	//对应CompoundField中的编号，从0开始；
-	int NumField = SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))]-1;
+	int NumField = SourceChecking[plantY * ScreenWidth + plantX]-1;
 	
 	//按下“W”，把振幅调高；但不能超过AmplitudeUpperLimit
 	if ((GetAsyncKeyState((unsigned short)'W') & 0x8000)&&(CompoundField[NumField]->getSourceAmplitude()< AmplitudeUpperLimit))
@@ -154,20 +176,20 @@ void Gardener::AdjustAmplitude()
 	}
 }
 
-void Gardener::AdjustFrequency()
+void Gardener::AdjustFrequency(int plantX, int plantY)
 {
 	static bool KeyWPressed = false;
 	static bool KeySPressed = false;
 	static double FrequencyUpperLimit = 1;//太快的话，显示不清楚
 
 	//测试：防止负索引(虽然正常情况下，一定是要SourceChecking为正，才能有机会触发这个函数)
-	if (SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))] == 0)
+	if (SourceChecking[plantY * ScreenWidth + plantX] == 0)
 	{
 		return;
 	}
 	
 	//对应CompoundField中的编号，从0开始；
-	int NumField = SourceChecking[(int(PlantingPoint.getYPos()) * ScreenWidth + int(PlantingPoint.getXPos()))] - 1;
+	int NumField = SourceChecking[plantY * ScreenWidth + plantX] - 1;
 
 	//按下“W”，把频率调高；但不能超过FrequencyUpperLimit
 	if ((GetAsyncKeyState((unsigned short)'W') & 0x8000) && (CompoundField[NumField]->getSourceFrequency() < FrequencyUpperLimit))
