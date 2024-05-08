@@ -5,7 +5,7 @@ Field::Field(const double& creationTime, const Point& s_Position,const double& s
 {
     StopActivation = false;
 
-    //初始化MediumLayer：MediumLayer中每个Medium接收Field的创建时间
+    //初始化MediumLayer：MediumLayer中每个Medium接收Field的创建时间;顺便初始化IfActivated
     MediumLayer.resize(ScreenWidth * ScreenHeight);
     for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
     {
@@ -21,7 +21,7 @@ Field::Field(const double& creationTime, const Point& s_Position,const double& s
     }
 }
 
-//将IfIfActivated和RayTip重置为初始状态
+//将IfActivated和RayTip重置为初始状态
 void Field::ClearIfActivated()
 {
     StopActivation = false;
@@ -43,9 +43,9 @@ double Field::getCreationTime()const
     return CreationTime;
 }
 
-std::vector<Medium>& Field::getRefMediumLayer()
+std::vector<Medium>* Field::getPtrMediumLayer()
 {
-    return MediumLayer;
+    return &MediumLayer;
 }
 
 Point Field::getSourcePosition() const 

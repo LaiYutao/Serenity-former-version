@@ -44,19 +44,25 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		BunchOfRayTips[i].setYPos(newYPos);
 		
 		//定位器：判断是否到了可以激活Medium的情形（是否离整数点足够近；而不能单纯看向上还是向下取整）。如果符合条件，就给出判断坐标
-		double JudgeRadius = 0.2;
+		double JudgeRadius = 0.4;
 		bool Judger = false;
 		double X = BunchOfRayTips[i].getXPos();
 		double Y = BunchOfRayTips[i].getYPos();
+		if (X<0 || Y<0 || X>ScreenWidth - 1 || Y>ScreenHeight - 1)
+		{
+			//RayTip越界则直接到下一条
+			continue;
+		}
 		int LessX = int(X);//向下取X，作为判断基准点X坐标
 		int LessY = int(Y);//向下取Y，作为判断基准点Y坐标
-		int ActX = 0;
-		int ActY = 0;//如果达到激活条件的话，就存储对应坐标
+		int ActX = int(getSourcePosition().getXPos());
+		int ActY = int(getSourcePosition().getYPos());//初始化为Source坐标如果达到激活条件的话，就用于存储对应坐标
 		for (int x = LessX;x < LessX + 2;++x) 
 		{
 			for(int y=LessY;y<LessY+2;++y)
 			{
-				if ((X - x) * (X - x) + (Y - y) * (Y - y) <= JudgeRadius * JudgeRadius)
+				//位于激活半径内且不得越界
+				if (((X - x) * (X - x) + (Y - y) * (Y - y) <= JudgeRadius * JudgeRadius)&&((x>=0)&&(y>=0)&&(x<=ScreenWidth-1)&&(y<=ScreenHeight-1)))
 				{
 					ActX = x;
 					ActY = y;
@@ -67,9 +73,10 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		}
 
 		//如果没达到激活条件，就不再执行下面步骤
-		if (Judger == false)return;
-
-		//判断Medium是否被激活过(将RayTip的坐标取整，就是所击中的MediumPixel的坐标)，如果没有，就将其激活
+		if (Judger == false)continue;
+		
+		
+		//判断Medium是否被激活过，如果没有，就将其激活
 		int MediumPixelIndex = ScreenWidth * ActY + ActX;
 		if (!IfActivated[MediumPixelIndex])
 		{

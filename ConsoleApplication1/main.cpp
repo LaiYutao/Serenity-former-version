@@ -50,7 +50,7 @@ void Act(ScreenManager TheScreenManager)
 		{
 			for (int i = 0;i < ScreenWidth * ScreenHeight;++i) 
 			{
-				TheField->getRefMediumLayer()[i].Vibrate(TimeOfNow);
+				(*TheField->getPtrMediumLayer())[i].Vibrate(TimeOfNow);
 			}
 		}
 
@@ -58,7 +58,7 @@ void Act(ScreenManager TheScreenManager)
 		TheMonitor.UpdateCompoundHeight(TheGardener.getCompoundMedium());
 
 		//Monitor将Height转化为字符
-		TheMonitor.ChangeIntoPixel(TheScreenManager.getRefScreenBuffer(),TheMonitor.getCompoundHeight());
+		TheMonitor.ChangeIntoPixel(TheScreenManager.getRefScreenBuffer());
 
 		//Monitor加上PlantingPoint的显示
 		TheMonitor.AddPlantingPoint(TheScreenManager.getRefScreenBuffer(), TheGardener.getPlantingPoint());

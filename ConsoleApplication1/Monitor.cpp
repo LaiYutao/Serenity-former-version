@@ -10,7 +10,7 @@ std::vector<double> Monitor::getCompoundHeight() const
 	return CompoundHeight;
 }
 
-void Monitor::UpdateCompoundHeight(const std::vector<std::vector<Medium>>& compoundMedium)
+void Monitor::UpdateCompoundHeight(const std::vector<std::vector<Medium>*>& compoundMedium)
 {
 	//先进行重置
 	CompoundHeight.clear();
@@ -18,21 +18,21 @@ void Monitor::UpdateCompoundHeight(const std::vector<std::vector<Medium>>& compo
 
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
-		for (std::vector<Medium> mediumLayer : compoundMedium)
+		for (std::vector<Medium>* mediumLayerPtr : compoundMedium)
 		{
 			//把各Medium层的Height叠加起来
-			CompoundHeight[i] += mediumLayer[i].getHeight();
+			CompoundHeight[i] += (*mediumLayerPtr)[i].getHeight();
 		}
 	}
 }
 
-void Monitor::ChangeIntoPixel(std::vector<char>& buffer, std::vector<double> compoundHeight)
+void Monitor::ChangeIntoPixel(std::vector<char>& buffer)
 {
 	int Offset = (GrayScale - 1) / 2; //灰度阶字符串索引所需的偏移量
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
 		//粗略的四舍五入，避免对于一些波，振幅最高的情形取不到
-		int ShownHeight = (compoundHeight[i] >= 0) ? int(compoundHeight[i] + 0.5) :int(compoundHeight[i] - 0.5);
+		int ShownHeight = (CompoundHeight[i] >= 0) ? int(CompoundHeight[i] + 0.5) :int(CompoundHeight[i] - 0.5);
 		if(ShownHeight + Offset>GrayScale-1)
 		{
 			buffer.push_back('@');
