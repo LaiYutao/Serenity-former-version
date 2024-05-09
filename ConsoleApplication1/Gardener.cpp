@@ -136,12 +136,6 @@ void Gardener::AdjustAmplitude(int plantX, int plantY)
 	static bool KeySPressed = false;
 	static double AmplitudeUpperLimit = (GrayScale - 1) / 2;//不能太高，否则效果不好
 	
-	//测试：防止负索引(虽然正常情况下，一定是要SourceChecking为正，才能有机会触发这个函数)
-	if (SourceChecking[plantY * ScreenWidth + plantX] == 0)
-	{
-		return;
-	}
-	
 	//对应CompoundField中的编号，从0开始；
 	int NumField = SourceChecking[plantY * ScreenWidth + plantX]-1;
 	
@@ -181,12 +175,7 @@ void Gardener::AdjustFrequency(int plantX, int plantY)
 	static bool KeyWPressed = false;
 	static bool KeySPressed = false;
 	static double FrequencyUpperLimit = 1;//太快的话，显示不清楚
-
-	//测试：防止负索引(虽然正常情况下，一定是要SourceChecking为正，才能有机会触发这个函数)
-	if (SourceChecking[plantY * ScreenWidth + plantX] == 0)
-	{
-		return;
-	}
+	static double FrequencyLowerLimit = -1;//低于零的话，就是逆向
 	
 	//对应CompoundField中的编号，从0开始；
 	int NumField = SourceChecking[plantY * ScreenWidth + plantX] - 1;
@@ -207,7 +196,7 @@ void Gardener::AdjustFrequency(int plantX, int plantY)
 	}
 
 	//按下“S”，把频率调低；但不能低于0
-	if ((GetAsyncKeyState((unsigned short)'S') & 0x8000) && (CompoundField[NumField]->getSourceFrequency() > 0))
+	if ((GetAsyncKeyState((unsigned short)'S') & 0x8000) && (CompoundField[NumField]->getSourceFrequency() > FrequencyLowerLimit))
 	{
 		if (!KeySPressed) //防止按键连续
 		{
