@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CircularField.cpp" />
+    <ClCompile Include="DiscJockey.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Gardener.cpp" />
     <ClCompile Include="main.cpp" />

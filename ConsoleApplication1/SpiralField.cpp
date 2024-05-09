@@ -74,8 +74,7 @@ void SpiralField::ActivateMedium(const double& timeOfNow, const double& frameTim
 		if (!IfActivated[MediumPixelIndex])
 		{
 			//设定时间与角度有关，形成螺旋效果
-			double RelationParemeter=10.05*pow(getSourceFrequency(),-2);//实验取点，用幂函数拟合
-			double SpiralParameter = RelationParemeter*getSourceFrequency();//螺旋参量，和螺旋的形态有关；经过实验：发现应该和频率呈正相关性效果会好，且与振幅无关
+			double SpiralParameter = 10.05 * pow(getSourceFrequency(), -1);//螺旋参量，和螺旋的形态有关；经过实验、取点、拟合、再调整：得出系数和指数超参数（用幂函数效果最好）
 			MediumLayer[MediumPixelIndex].GetActivated(timeOfNow+ SpiralParameter*(double)i/NumberOfRay/this->getSourceSpeed(), this->getSourceAmplitude(), this->getSourceFrequency(), this->getSourceInitialPhase());
 			IfActivated[MediumPixelIndex] = true;
 		}

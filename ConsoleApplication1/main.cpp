@@ -1,6 +1,6 @@
+#include"Gardener.h"
 #include"Monitor.h"
 #include"DiscJockey.h"
-#include"Gardener.h"
 #include<chrono>
 #include<thread>
 
@@ -14,6 +14,7 @@ void Act(ScreenManager TheScreenManager)
 
 	Gardener TheGardener;
 	Monitor TheMonitor;
+	DiscJockey TheDiscJockey;
 
 	char* screen = new char[2*ScreenWidth * ScreenHeight];
 	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
@@ -55,14 +56,22 @@ void Act(ScreenManager TheScreenManager)
 			}
 		}
 
-		//Monitor处理各Medium层的叠加
+		//TheMonitor处理各Medium层的叠加
 		TheMonitor.UpdateCompoundHeight(TheGardener.getCompoundMedium());
 
-		//Monitor将Height转化为字符
+		//TheMonitor将Height转化为字符
 		TheMonitor.ChangeIntoPixel(TheScreenManager.getRefScreenBuffer());
 
-		//Monitor加上PlantingPoint的显示
+		//TheMonitor加上PlantingPoint的显示
 		TheMonitor.AddPlantingPoint(TheScreenManager.getRefScreenBuffer(), TheGardener.getPlantingPoint());
+
+		//TheDiscJockey接收CompoundHeight
+		TheDiscJockey.CalculateHeightDistribution(TheMonitor.getCompoundHeight());
+		
+		//待定！！！TheDiscJockey计算发出赫兹（*）
+		TheDiscJockey.CalculateHertz();
+		//与B4的赫兹比较，输出更小的，保险起见，防止损坏设备（*）
+		double OutputHertz = (TheDiscJockey.getCalculatedHertz() <= 493.88) ? TheDiscJockey.getCalculatedHertz() : 493.88;
 
 		for (int i = 0;i < 2 * ScreenWidth * ScreenHeight;++i)
 		{
@@ -75,7 +84,16 @@ void Act(ScreenManager TheScreenManager)
 		// 控制帧率
 		if (ElapsedTime < FrameTime)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - ElapsedTime));
+			//发声的尝试，待定！！！（*）
+			if (OutputHertz <= 37)//赫兹小于37就不发声，Beep也有参数范围
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - ElapsedTime));
+			}
+			else
+			{
+				Beep(OutputHertz, FrameTime - ElapsedTime);
+			}
+			
 		}
 	}
 }
