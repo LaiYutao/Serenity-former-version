@@ -45,8 +45,8 @@ void Monitor::ChangeIntoPixel(std::vector<char>& buffer)
 		}
 		else
 		{
-			buffer.push_back(" .,:;*oH%#&$@"[ShownHeight + Offset]);
-			buffer.push_back(" .,:;*oH%#&$@"[ShownHeight + Offset]);
+			buffer.push_back(" .,:;*o%&#H$@"[ShownHeight + Offset]); //经过实验得出来的灰度阶序列，基本准确；
+			buffer.push_back(" .,:;*o%&#H$@"[ShownHeight + Offset]); //同时十三个灰度阶，抛出Height==0对应的情况，刚好能对应十二个音，很方便进行音乐的映射
 		}
 	}
 }

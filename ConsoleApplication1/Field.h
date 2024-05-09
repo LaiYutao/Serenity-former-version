@@ -33,7 +33,7 @@ public:
 
 protected:
 	bool StopActivation;
-	static const int NumberOfRay = ((ScreenWidth + ScreenHeight) * 2 - 4)*4;//最外圈点的个数的倍数，作为发出光线的数量（是一个未经严格检验的假设）
+	static const int NumberOfRay = ((ScreenWidth + ScreenHeight) * 2 - 4)*12;//最外圈点的个数的倍数，作为发出光线的数量（4倍时已经大致可行，8倍时中间区域只剩少数，12倍时只剩边界有少数毛刺,14倍时没有显著改善，但显示上肉眼可见变卡顿了；4、8、12都不错）
 	bool IfActivated[ScreenWidth * ScreenHeight];
 	RayTip BunchOfRayTips[NumberOfRay];
 	std::vector<Medium> MediumLayer;

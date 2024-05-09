@@ -75,7 +75,6 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		//如果没达到激活条件，就不再执行下面步骤
 		if (Judger == false)continue;
 		
-		
 		//判断Medium是否被激活过，如果没有，就将其激活
 		int MediumPixelIndex = ScreenWidth * ActY + ActX;
 		if (!IfActivated[MediumPixelIndex])

@@ -9,7 +9,6 @@ RayTip::RayTip(double xPos, double yPos, double directionAngle, double distanceT
 {
 }
 
-
 double RayTip::getDirectionAngle() const 
 {
     return DirectionAngle;

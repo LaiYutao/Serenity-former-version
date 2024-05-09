@@ -33,6 +33,7 @@ void Act(ScreenManager TheScreenManager)
 
 		//获取时间轴中当前时间
 		double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
+		
 		//启动PlantingPoint的选择
 		TheGardener.SelectPosition();
 
@@ -45,7 +46,7 @@ void Act(ScreenManager TheScreenManager)
 			TheField->ActivateMedium(TimeOfNow, double(FrameTime)/1000);
 		}
 		
-		//让每个场对应的Medium层的Medium都振动（改变Height）
+		//让每个场对应的Medium层的每个Medium都振动（改变Height）
 		for (auto TheField : TheGardener.getRefCompoundField())
 		{
 			for (int i = 0;i < ScreenWidth * ScreenHeight;++i) 
@@ -70,6 +71,7 @@ void Act(ScreenManager TheScreenManager)
 
 		WriteConsoleOutputCharacterA(hConsole, screen, 2*ScreenWidth * ScreenHeight, { 0,0 }, &dwBytesWritten);
 		TheScreenManager.SetEmptyBuffer();
+		
 		// 控制帧率
 		if (ElapsedTime < FrameTime)
 		{
