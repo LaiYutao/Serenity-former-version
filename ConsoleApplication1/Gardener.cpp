@@ -90,14 +90,14 @@ void Gardener::PlantIt(const double& timeOfNow)
 	//如果此处没有种下过Source
 	if (SourceChecking[PlantY* ScreenWidth + PlantX]==0)
 	{
-		if ((GetAsyncKeyState((unsigned short)'J') & 0x8000)&& !KeyJPressed)
+		if ((GetAsyncKeyState((unsigned short)'J') & 0x8000)&& !KeyJPressed && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
 		{
 			CompoundField.push_back(new CircularField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
 			CompoundMedium.push_back(CompoundField[CompoundField.size()-1]->getPtrMediumLayer());
 			SourceChecking[PlantY * ScreenWidth + PlantX] = CompoundField.size();//记录此时创建的场的序号，从“1”开始
 			KeyJPressed = true;//防止刚创建就开始调节参数；而应该先放开一下，再考虑是否开始调节
 		}
-		else if ((GetAsyncKeyState((unsigned short)'K') & 0x8000)&& !KeyKPressed)
+		else if ((GetAsyncKeyState((unsigned short)'K') & 0x8000)&& !KeyKPressed && !(GetAsyncKeyState((unsigned short)'J') & 0x8000))
 		{
 			CompoundField.push_back(new SpiralField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
 			CompoundMedium.push_back(CompoundField[CompoundField.size() - 1]->getPtrMediumLayer());
@@ -108,14 +108,14 @@ void Gardener::PlantIt(const double& timeOfNow)
 	}
 	else //如果此处已经种下过Source
 	{
-		if (GetAsyncKeyState((unsigned short)'J') & 0x8000)
+		if ((GetAsyncKeyState((unsigned short)'J') & 0x8000) && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
 		{
 			if (!KeyJPressed)
 			{
 				AdjustAmplitude(PlantX,PlantY);//按紧“J”键，就进入对Amplitude的调节；松开就结束调节
 			}
 		}
-		else if (GetAsyncKeyState((unsigned short)'K') & 0x8000)
+		else if ((GetAsyncKeyState((unsigned short)'K') & 0x8000)&& !(GetAsyncKeyState((unsigned short)'J') & 0x8000))
 		{
 			if(!KeyKPressed)
 			{

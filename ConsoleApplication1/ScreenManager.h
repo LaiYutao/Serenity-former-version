@@ -17,14 +17,19 @@ class ScreenManager
 {
 public:
     ScreenManager();
-    void Screeninit();
+    void ChangeBufferForm();
+    void ShowImage();
+    void ShowStaticImage(); //对于每帧显示一样的东西，每次显示后不清空ScreenBuffer
     std::vector<char>& getRefScreenBuffer();
     std::vector<char> getScreenBuffer();
-    void ShowPixel();//修正的屏幕参数：因为横向单位输出两个字符，平衡高和宽
+    //char* getScreenShow()const;
+    //HANDLE& get_hConsole();
+    void setScreenShow(char* screen);
     void SetEmptyBuffer();
-    void ScreenClear();
+
 private:
-    //HANDLE ConsoleOutput;
+    HANDLE hConsole;
+    char* ScreenShow;
     std::vector<char> ScreenBuffer;
 };
 #endif // SCREENMANAGER_H

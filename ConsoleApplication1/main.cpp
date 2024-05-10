@@ -1,8 +1,11 @@
 #include"Gardener.h"
 #include"Monitor.h"
 #include"DiscJockey.h"
+#include<fstream>
+#include<string>
 #include<chrono>
 #include<thread>
+#include<random>
 
 //包含主loop在内的主干
 void Act(ScreenManager TheScreenManager)
@@ -12,14 +15,10 @@ void Act(ScreenManager TheScreenManager)
 	auto tp1 = std::chrono::high_resolution_clock::now();
 	auto tp2 = std::chrono::high_resolution_clock::now();
 
+	//初始化三个单例
 	Gardener TheGardener;
 	Monitor TheMonitor;
 	DiscJockey TheDiscJockey;
-
-	char* screen = new char[2*ScreenWidth * ScreenHeight];
-	HANDLE hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	SetConsoleActiveScreenBuffer(hConsole);
-	DWORD dwBytesWritten = 0;
 
 	//主循环
 	while (1) 
@@ -28,9 +27,6 @@ void Act(ScreenManager TheScreenManager)
 		tp2 = std::chrono::high_resolution_clock::now();
 		auto ElapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(tp2 - tp1).count();
 		tp1 = tp2;
-
-		//std::thread ScreenShow(&ScreenManager::ShowPixel,&TheScreenManager);
-		//ScreenShow.join();
 
 		//获取时间轴中当前时间
 		double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
@@ -73,19 +69,14 @@ void Act(ScreenManager TheScreenManager)
 		//与B4的赫兹比较，输出更小的，保险起见，防止损坏设备（*）
 		double OutputHertz = (TheDiscJockey.getCalculatedHertz() <= 493.88) ? TheDiscJockey.getCalculatedHertz() : 493.88;
 
-		for (int i = 0;i < 2 * ScreenWidth * ScreenHeight;++i)
-		{
-			screen[i] = TheScreenManager.getScreenBuffer()[i];
-		}
+		//输出图像
+		TheScreenManager.ShowImage();
 
-		WriteConsoleOutputCharacterA(hConsole, screen, 2*ScreenWidth * ScreenHeight, { 0,0 }, &dwBytesWritten);
-		TheScreenManager.SetEmptyBuffer();
-		
 		// 控制帧率
 		if (ElapsedTime < FrameTime)
 		{
 			//发声的尝试，待定！！！（*）
-			if (OutputHertz <= 37)//赫兹小于37就不发声，Beep也有参数范围
+			if (OutputHertz <= 37)//赫兹小于37就不发声，Beep也有规定的参数范围
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - ElapsedTime));
 			}
@@ -98,9 +89,49 @@ void Act(ScreenManager TheScreenManager)
 	}
 }
 
+void CoverPage() 
+{
+
+}
+
+void IntroductionPage()
+{
+
+}
+
+void BridgePage(ScreenManager TheScreenManager)
+{
+	//设定时间原点
+	double TimeOrigin = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+	double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
+	//读取文件
+	std::ifstream inFile("BridgePage.txt");
+	char c;
+	while (inFile.get(c))
+	{
+		TheScreenManager.getRefScreenBuffer().push_back(c);
+	}
+	inFile.close();
+
+	//设定此页持续时间
+	std::uniform_real_distribution<double> dis(0.1, 1.5);
+	std::default_random_engine gen;
+	double Duration= dis(gen);
+
+	//输出page
+	while (TimeOfNow < Duration)
+	{
+		//获取时间轴中当前时间
+		TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
+		TheScreenManager.ShowStaticImage();
+	}
+	TheScreenManager.SetEmptyBuffer();
+}
+
 int main() 
 {
 	ScreenManager TheScreenManager;
+	BridgePage(TheScreenManager);
 	Act(TheScreenManager);
 	return 0;
 }
