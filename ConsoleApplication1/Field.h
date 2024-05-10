@@ -7,7 +7,6 @@
 #include<chrono>
 #include<cmath>
 
-
 class Field 
 {
 public:

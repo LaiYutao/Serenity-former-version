@@ -1,6 +1,5 @@
 #ifndef SCREENMANAGER_H
 #define SCREENMANAGER_H
-
 #include <iostream>
 #include <vector>
 #include <windows.h>

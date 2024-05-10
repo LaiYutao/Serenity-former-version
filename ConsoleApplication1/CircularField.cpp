@@ -24,16 +24,6 @@ void CircularField::ActivateMedium(const double& timeOfNow, const double& frameT
 		StopActivation = true;
 	}
 
-	//以下是激活还未完成时的正常步骤：
-	
-	////将source处直接激活
-	//if (!IfActivated[int(getSourcePosition().getYPos() * ScreenWidth + getSourcePosition().getXPos())])
-	//{
-	//	MediumLayer[int(getSourcePosition().getYPos() * ScreenWidth + getSourcePosition().getXPos())].GetActivated(timeOfNow, this->getSourceAmplitude(), this->getSourceFrequency(), this->getSourceInitialPhase());
-	//	IfActivated[int(getSourcePosition().getYPos() * ScreenWidth + getSourcePosition().getXPos())] = true;
-	//	//Sleep(int(1000 / getSourceSpeed()));//等待传播时间（传播一个Pixel的时间），以免周围离波源最近一圈的点也立即被激活
-	//}
-
 	//遍历每一条射线
 	for (int i = 0;i < NumberOfRay;++i) 
 	{

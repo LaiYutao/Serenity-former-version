@@ -2,6 +2,7 @@
 
 DiscJockey::DiscJockey()
 {
+	MusicTypeFlag = true; //一开始默认微分白噪音模式；
 	int Offset = (GrayScale - 1) / 2; //灰度阶字符串索引所需的偏移量
 	for (int i = 0;i < GrayScale;++i)
 	{
@@ -58,6 +59,26 @@ void DiscJockey::CalculateHertz()
 double DiscJockey::getCalculatedHertz() const
 {
 	return CalculatedHertz;
+}
+
+void DiscJockey::DetectMusicTypeChange()
+{
+	static bool KeyJPressed = false;
+	static bool KeyKPressed = false;
+	if ((GetAsyncKeyState((unsigned short)'J') & 0x8000) && (GetAsyncKeyState((unsigned short)'K') & 0x8000))
+	{
+		if (!KeyJPressed && !KeyKPressed)
+		{
+			MusicTypeFlag = !MusicTypeFlag;
+			KeyJPressed = true;
+			KeyKPressed = true;
+		}
+	}
+	else
+	{
+		KeyJPressed = false;
+		KeyKPressed = false;
+	}
 }
 
 
