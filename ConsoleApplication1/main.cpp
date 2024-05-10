@@ -4,7 +4,6 @@
 #include<fstream>
 #include<string>
 #include<chrono>
-#include<thread>
 #include<random>
 
 //包含主loop在内的主干
@@ -61,28 +60,28 @@ void Act(ScreenManager TheScreenManager)
 		//TheMonitor加上PlantingPoint的显示
 		TheMonitor.AddPlantingPoint(TheScreenManager.getRefScreenBuffer(), TheGardener.getPlantingPoint());
 
+		//TheDiscJockey检测MusicType是否改变
+		TheDiscJockey.DetectMusicTypeChange();
+
 		//TheDiscJockey接收CompoundHeight
 		TheDiscJockey.CalculateHeightDistribution(TheMonitor.getCompoundHeight());
 		
-		//待定！！！TheDiscJockey计算发出赫兹（*）
+		//TheDiscJockey计算在微分白噪音模式下发出赫兹
 		TheDiscJockey.CalculateHertz();
-		//与B4的赫兹比较，输出更小的，保险起见，防止损坏设备（*）
-		double OutputHertz = (TheDiscJockey.getCalculatedHertz() <= 493.88) ? TheDiscJockey.getCalculatedHertz() : 493.88;
 
-		//输出图像
+		//TheScreenManager输出图像
 		TheScreenManager.ShowImage();
 
-		// 控制帧率
-		if (ElapsedTime < FrameTime)
+		// 控制帧率；并在等待时间发声；
+		if (ElapsedTime < FrameTime)//单位为毫秒
 		{
-			//发声的尝试，待定！！！（*）
-			if (OutputHertz <= 37)//赫兹小于37就不发声，Beep也有规定的参数范围
+			if (!TheDiscJockey.getMusicType())
 			{
 				std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - ElapsedTime));
 			}
 			else
 			{
-				Beep(OutputHertz, FrameTime - ElapsedTime);
+				TheDiscJockey.MakeWhiteNoise(FrameTime - ElapsedTime);
 			}
 			
 		}
@@ -114,7 +113,7 @@ void BridgePage(ScreenManager TheScreenManager)
 	inFile.close();
 
 	//设定此页持续时间
-	std::uniform_real_distribution<double> dis(0.1, 1.5);
+	std::uniform_real_distribution<double> dis(0.2, 1.5);//比较随意的时间区间，从中随机选择，作为此页显示时间
 	std::default_random_engine gen;
 	double Duration= dis(gen);
 

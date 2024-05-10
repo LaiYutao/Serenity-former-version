@@ -61,13 +61,18 @@ double DiscJockey::getCalculatedHertz() const
 	return CalculatedHertz;
 }
 
+bool DiscJockey::getMusicType() const
+{
+	return MusicTypeFlag;
+}
+
 void DiscJockey::DetectMusicTypeChange()
 {
 	static bool KeyJPressed = false;
 	static bool KeyKPressed = false;
 	if ((GetAsyncKeyState((unsigned short)'J') & 0x8000) && (GetAsyncKeyState((unsigned short)'K') & 0x8000))
 	{
-		if (!KeyJPressed && !KeyKPressed)
+		if (!KeyJPressed && !KeyKPressed) //仍然是：防止按紧变来变去的情况
 		{
 			MusicTypeFlag = !MusicTypeFlag;
 			KeyJPressed = true;
@@ -78,6 +83,26 @@ void DiscJockey::DetectMusicTypeChange()
 	{
 		KeyJPressed = false;
 		KeyKPressed = false;
+	}
+}
+
+void DiscJockey::MakeWhiteNoise(const int& kDuration)
+{
+	if (MusicTypeFlag == true)
+	{
+
+		if ((CalculatedHertz <= 37)||(CalculatedHertz> 493.88))//赫兹小于37,或者大于B4，就不发声，Beep也有规定的参数范围
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(kDuration));
+		}
+		else
+		{
+			Beep(CalculatedHertz,kDuration);
+		}
+	}
+	else
+	{
+		return ;
 	}
 }
 

@@ -10,7 +10,9 @@ public:
 	void CalculateHeightDistribution(const std::vector<double>& compoundHeight);
 	void CalculateHertz();
 	double getCalculatedHertz()const;
+	bool getMusicType()const;
 	void DetectMusicTypeChange();
+	void MakeWhiteNoise(const int& kDuration);
 
 private:
 	int HeightDistribution[GrayScale];
