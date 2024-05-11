@@ -30,6 +30,16 @@ void Act(ScreenManager TheScreenManager)
 		//获取时间轴中当前时间
 		double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
 		
+		//TheDiscJockey检测MusicType是否改变
+		TheDiscJockey.DetectMusicTypeChange();
+
+		//判断此时MusicType，决定是否启动MakeClusters()
+		std::thread ClusterMode;
+		if (TheDiscJockey.getMusicType() == false)
+		{
+			ClusterMode=std::thread ([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(ElapsedTime); });
+		}
+
 		//启动PlantingPoint的选择
 		TheGardener.SelectPosition();
 
@@ -60,15 +70,18 @@ void Act(ScreenManager TheScreenManager)
 		//TheMonitor加上PlantingPoint的显示
 		TheMonitor.AddPlantingPoint(TheScreenManager.getRefScreenBuffer(), TheGardener.getPlantingPoint());
 
-		//TheDiscJockey检测MusicType是否改变
-		TheDiscJockey.DetectMusicTypeChange();
-
 		//TheDiscJockey接收CompoundHeight
 		TheDiscJockey.CalculateHeightDistribution(TheMonitor.getCompoundHeight());
 		
 		//TheDiscJockey计算在微分白噪音模式下发出赫兹
 		TheDiscJockey.CalculateHertz();
 
+		//等待ClusterMode进程完成,如果有的话
+		if ((TheDiscJockey.getMusicType() == false)&&ClusterMode.joinable())
+		{
+			ClusterMode.join();
+		}
+		
 		//TheScreenManager输出图像
 		TheScreenManager.ShowImage();
 
@@ -88,12 +101,7 @@ void Act(ScreenManager TheScreenManager)
 	}
 }
 
-void CoverPage() 
-{
-
-}
-
-void IntroductionPage()
+void CoverPage(ScreenManager TheScreenManager)
 {
 
 }

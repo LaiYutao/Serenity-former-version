@@ -3,16 +3,28 @@
 DiscJockey::DiscJockey()
 {
 	MusicTypeFlag = true; //一开始默认微分白噪音模式；
+	
 	int Offset = (GrayScale - 1) / 2; //灰度阶字符串索引所需的偏移量
+	
+	//初始化：所有的Medium的Height均为0
 	for (int i = 0;i < GrayScale;++i)
 	{
 		HeightDistribution[i] = 0;
 	}
 
-	//初始化：所有的Medium的Height均为0
 	HeightDistribution[0 + Offset] = ScreenWidth * ScreenHeight;
 
 	CalculatedHertz = 0;
+
+	// 配置波形格式
+	wfx.wFormatTag = WAVE_FORMAT_PCM;
+	wfx.nChannels = 1;                  // 单声道
+	wfx.nSamplesPerSec = 44100;         // 采样率
+	wfx.wBitsPerSample = 16;            // 位深度
+	wfx.nBlockAlign = wfx.nChannels * wfx.wBitsPerSample / 8;
+	wfx.nAvgBytesPerSec = wfx.nSamplesPerSec * wfx.nBlockAlign;
+	wfx.cbSize = 0;
+
 }
 
 void DiscJockey::CalculateHeightDistribution(const std::vector<double>& compoundHeight)
@@ -40,10 +52,6 @@ void DiscJockey::CalculateHeightDistribution(const std::vector<double>& compound
 
 void DiscJockey::CalculateHertz()
 {
-	//初始化十二音音列，从中央C开始的十二个音，中间项为0；
-	double TwelveToneSeries[13] =
-	{ 261.63,277.18,293.66,311.13,329.63,349.23,0,369.99,392.00,415.30,440.00,466.16,493.88 };
-	
 	CalculatedHertz = 0;
 
 	//简单的尝试1：直接算加权平均的频率；
@@ -53,7 +61,6 @@ void DiscJockey::CalculateHertz()
 	}
 
 	CalculatedHertz /= ScreenWidth * ScreenHeight;
-
 }
 
 double DiscJockey::getCalculatedHertz() const
@@ -88,22 +95,52 @@ void DiscJockey::DetectMusicTypeChange()
 
 void DiscJockey::MakeWhiteNoise(const int& kDuration)
 {
-	if (MusicTypeFlag == true)
+	if ((CalculatedHertz <= 37)||(CalculatedHertz> 493.88))//赫兹小于37,或者大于B4，就不发声，Beep也有规定的参数范围
 	{
-
-		if ((CalculatedHertz <= 37)||(CalculatedHertz> 493.88))//赫兹小于37,或者大于B4，就不发声，Beep也有规定的参数范围
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(kDuration));
-		}
-		else
-		{
-			Beep(CalculatedHertz,kDuration);
-		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(kDuration));
 	}
 	else
 	{
-		return ;
+		Beep(CalculatedHertz,kDuration);
 	}
+}
+
+void CALLBACK waveOutProc(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
+	if (uMsg == WOM_DONE) {
+	}
+}
+
+void DiscJockey::MakeClusters(const int& kDuration)
+{
+	
+	result = waveOutOpen(&hWaveOut, WAVE_MAPPER, &wfx, (DWORD_PTR)waveOutProc, 0, CALLBACK_FUNCTION);
+	
+	// 创建并填充音频数据
+	const int numSamples = int(44100 * kDuration/1000); //除一千用于转换单位
+	wfx.nSamplesPerSec = int(numSamples / (double(kDuration) / 1000))+1;//抵消一些取整带来的误差
+	short* audioData = new short[numSamples];
+	for (int i = 0; i < numSamples; ++i) {
+		double t = (double)i / wfx.nSamplesPerSec; // 取细分的时间
+		double Intensity = 0;
+		//十二音叠上去；由于用的是正弦函数，Height==0对应的0赫兹，对应的振幅就直接是零，很方便
+		for (int j = 0;j < 13;j++)
+		{
+			Intensity += HeightDistribution[j]*sin(TwelveToneSeries[j] * t);
+		}
+		
+		Intensity /= ScreenWidth * ScreenHeight; //振幅取均值
+		Intensity *= 5000;// 适当放大，使得播放正常,音量和白噪音模式比较像即可
+		
+		audioData[i] = static_cast<short>(Intensity); 
+	}
+
+	header.lpData = (LPSTR)audioData;
+	header.dwBufferLength = numSamples * sizeof(short);
+	header.dwFlags = 0;
+	header.dwLoops = 0;
+
+	result = waveOutPrepareHeader(hWaveOut, &header, sizeof(WAVEHDR));
+	result = waveOutWrite(hWaveOut, &header, sizeof(WAVEHDR));
 }
 
 
