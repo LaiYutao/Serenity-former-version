@@ -16,7 +16,9 @@ public:
 	void CalculateHertz();
 	double getCalculatedHertz()const;
 	bool getMusicType()const;
+	bool getIfMute()const;
 	void DetectMusicTypeChange();
+	void DetectIfMute();
 	void MakeWhiteNoise(const int& kDuration);
 	void MakeClusters(const int& kDuration);
 
@@ -25,7 +27,8 @@ private:
 	double TwelveToneSeries[13]=
 	{ 261.63,277.18,293.66,311.13,329.63,349.23,0,369.99,392.00,415.30,440.00,466.16,493.88 };
 	int HeightDistribution[GrayScale];
-	bool MusicTypeFlag;// true对应微分白噪音模式，false对应十二音音簇模式
+	bool MusicTypeFlag;// true对应十二音音簇模式，false对应微分白噪音模式
+	bool IfMute;//受不了音效的话，也可以静音
 	double CalculatedHertz;//计算结果储存于内部，使得计算和发声分离
 	
 	//为了实现MakeClusters()而用到的变量，均为Windows API 相关变量，故不按照本项目其他部分的命名方式

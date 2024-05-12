@@ -30,14 +30,26 @@ void Act(ScreenManager TheScreenManager)
 		//获取时间轴中当前时间
 		double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
 		
+		//TheDiscJockey检测是否处于静音模式
+		TheDiscJockey.DetectIfMute();
+
 		//TheDiscJockey检测MusicType是否改变
 		TheDiscJockey.DetectMusicTypeChange();
 
-		//判断此时MusicType，决定是否启动MakeClusters()
-		std::thread ClusterMode;
-		if (TheDiscJockey.getMusicType() == false)
+		//如果不是处于静音模式，则创建对应音乐模式的线程
+		std::thread MusicMode;
+		if (TheDiscJockey.getIfMute() == false)
 		{
-			ClusterMode=std::thread ([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(ElapsedTime); });
+			if (TheDiscJockey.getMusicType() == true)
+			{
+				//十二音音簇模式
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(ElapsedTime); });
+			}
+			else
+			{
+				//微分白噪音模式
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(ElapsedTime); });
+			}
 		}
 
 		//启动PlantingPoint的选择
@@ -76,27 +88,19 @@ void Act(ScreenManager TheScreenManager)
 		//TheDiscJockey计算在微分白噪音模式下发出赫兹
 		TheDiscJockey.CalculateHertz();
 
-		//等待ClusterMode进程完成,如果有的话
-		if ((TheDiscJockey.getMusicType() == false)&&ClusterMode.joinable())
+		//等待MusicMode进程完成
+		if (MusicMode.joinable())
 		{
-			ClusterMode.join();
+			MusicMode.join();
 		}
 		
 		//TheScreenManager输出图像
 		TheScreenManager.ShowImage();
 
-		// 控制帧率；并在等待时间发声；
+		// 控制帧率；
 		if (ElapsedTime < FrameTime)//单位为毫秒
 		{
-			if (!TheDiscJockey.getMusicType())
-			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - ElapsedTime));
-			}
-			else
-			{
-				TheDiscJockey.MakeWhiteNoise(FrameTime - ElapsedTime);
-			}
-			
+			std::this_thread::sleep_for(std::chrono::milliseconds(FrameTime - ElapsedTime));
 		}
 	}
 }
