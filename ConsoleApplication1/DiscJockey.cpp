@@ -105,7 +105,8 @@ void DiscJockey::DetectIfMute()
 	{
 		if (!KeyMPressed)
 		{
-			IfMute = true;
+			IfMute = !IfMute;
+			KeyMPressed = true;
 		}
 	}
 	else
