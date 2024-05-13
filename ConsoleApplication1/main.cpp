@@ -43,12 +43,12 @@ void Act(ScreenManager TheScreenManager)
 			if (TheDiscJockey.getMusicType() == true)
 			{
 				//十二音音簇模式
-				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(ElapsedTime); });
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(0.5*ElapsedTime); }); 
 			}
 			else
 			{
 				//微分白噪音模式
-				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(ElapsedTime); });
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(0.5*ElapsedTime); });
 			}
 		}
 
@@ -107,7 +107,40 @@ void Act(ScreenManager TheScreenManager)
 
 void CoverPage(ScreenManager TheScreenManager)
 {
+	//读取文件
+	std::ifstream inFile("txtfile\\CoverPage.txt");
+	char c;
+	while (inFile.get(c))
+	{
+		if (c != '\n') //消除换行符
+		{
+			TheScreenManager.getRefScreenBuffer().push_back(c);
+		}
+	}
+	inFile.close();
 
+	bool Out = false;
+	bool KeySpacePressed = false;
+
+	//输出Page
+	while (Out == false)
+	{
+		//检查是否按下空格键
+		if (GetAsyncKeyState((unsigned short)' ') & 0x8000)
+		{
+			if (!KeySpacePressed)
+			{
+				Out = true;
+				KeySpacePressed = true;
+			}
+		}
+		else
+		{
+			KeySpacePressed = false;
+		}
+		TheScreenManager.ShowStaticImage();
+	}
+	TheScreenManager.SetEmptyBuffer();
 }
 
 void BridgePage(ScreenManager TheScreenManager)
@@ -116,7 +149,7 @@ void BridgePage(ScreenManager TheScreenManager)
 	double TimeOrigin = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 	double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
 	//读取文件
-	std::ifstream inFile("BridgePage.txt");
+	std::ifstream inFile("txtfile\\BridgePage.txt");
 	char c;
 	while (inFile.get(c))
 	{
@@ -142,6 +175,7 @@ void BridgePage(ScreenManager TheScreenManager)
 int main() 
 {
 	ScreenManager TheScreenManager;
+	CoverPage(TheScreenManager);
 	BridgePage(TheScreenManager);
 	Act(TheScreenManager);
 	return 0;

@@ -120,7 +120,7 @@ void CALLBACK waveOutProc(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, DWORD_P
 	}
 }
 
-void DiscJockey::MakeWhiteNoise(const int& kDuration)
+void DiscJockey::MakeWhiteNoise(const double& kDuration)
 {
 	result = waveOutOpen(&hWaveOut, WAVE_MAPPER, &wfx, (DWORD_PTR)waveOutProc, 0, CALLBACK_FUNCTION);
 
@@ -135,16 +135,19 @@ void DiscJockey::MakeWhiteNoise(const int& kDuration)
 	}
 
 	//刨除末端部分振幅，试图缓解振幅绝对值比较高的时候突然停止，频率骤减，发出像煤气灶的声音；可以理解为某种程度上的低通滤波器
-	if (kDuration > 20) //防止越界
+	if (kDuration > 10) //防止越界
 	{
 		double absminIntensity = 10000;
-		int minNum = numSamples - int(0.02 * wfx.nSamplesPerSec);
-		for (int i = numSamples - 1;i > numSamples - int(0.02 * wfx.nSamplesPerSec);--i)
+		int minNum = numSamples - int(0.01 * wfx.nSamplesPerSec);
+		for (int i = numSamples - 1;i > numSamples - int(0.01 * wfx.nSamplesPerSec);--i)
 		{
 			if (abs(audioData[i]) < absminIntensity)
 			{
 				absminIntensity = abs(audioData[i]);
 				minNum = i;
+			}
+			if (absminIntensity <= 10) { //减少遍历次数
+				break;
 			}
 		}
 		for (int i = minNum + 1;i < numSamples; ++i)
@@ -163,7 +166,7 @@ void DiscJockey::MakeWhiteNoise(const int& kDuration)
 	result = waveOutWrite(hWaveOut, &header, sizeof(WAVEHDR));
 }
 
-void DiscJockey::MakeClusters(const int& kDuration)
+void DiscJockey::MakeClusters(const double& kDuration)
 {
 	result = waveOutOpen(&hWaveOut, WAVE_MAPPER, &wfx, (DWORD_PTR)waveOutProc, 0, CALLBACK_FUNCTION);
 	
@@ -190,16 +193,19 @@ void DiscJockey::MakeClusters(const int& kDuration)
 	}
 
 	//刨除末端部分振幅，试图缓解振幅比较高的时候突然停止，频率骤减，发出像煤气灶的声音；可以理解为某种程度上的低通滤波器
-	if(kDuration>20) //防止越界
+	if(kDuration>10) //防止越界
 	{
 		double absminIntensity = 10000;
-		int minNum = numSamples - int(0.02 * wfx.nSamplesPerSec);
-		for (int i = numSamples - 1;i > numSamples - int(0.02 * wfx.nSamplesPerSec);--i)
+		int minNum = numSamples - int(0.01 * wfx.nSamplesPerSec);
+		for (int i = numSamples - 1;i > numSamples - int(0.01 * wfx.nSamplesPerSec);--i)
 		{
 			if (abs(audioData[i]) < absminIntensity)
 			{
 				absminIntensity = abs(audioData[i]);
 				minNum = i;
+			}
+			if (absminIntensity <=10) {//减少遍历次数
+				break;
 			}
 		}
 		for (int i = minNum + 1;i < numSamples; ++i)

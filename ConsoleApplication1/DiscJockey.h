@@ -19,8 +19,8 @@ public:
 	bool getIfMute()const;
 	void DetectMusicTypeChange();
 	void DetectIfMute();
-	void MakeWhiteNoise(const int& kDuration);
-	void MakeClusters(const int& kDuration);
+	void MakeWhiteNoise(const double& kDuration);
+	void MakeClusters(const double& kDuration);
 
 private:
 	//初始化十二音音列，从中央C开始的十二个音，中间项为0；

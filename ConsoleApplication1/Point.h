@@ -13,12 +13,6 @@ public:
     double getYPos() const;
     void setXPos(double xPos);
     void setYPos(double yPos);
-    //Point operator+(const Point& point) const;
-    //Point operator-(const Point& point) const;
-    //Point operator*(double factor) const;
-    //Point operator/(double factor) const;
-    //Point& operator+=(const Point& point);
-    //Point& operator-=(const Point& point);
 
 private:
 	double XPos;
