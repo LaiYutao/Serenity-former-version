@@ -146,7 +146,7 @@ void DiscJockey::MakeWhiteNoise(const double& kDuration)
 				absminIntensity = abs(audioData[i]);
 				minNum = i;
 			}
-			if (absminIntensity <= 10) { //减少遍历次数
+			if (absminIntensity <= 100) { //减少遍历次数
 				break;
 			}
 		}
@@ -204,7 +204,7 @@ void DiscJockey::MakeClusters(const double& kDuration)
 				absminIntensity = abs(audioData[i]);
 				minNum = i;
 			}
-			if (absminIntensity <=10) {//减少遍历次数
+			if (absminIntensity <=100) {//减少遍历次数
 				break;
 			}
 		}

@@ -1,13 +1,12 @@
 #include "Gardener.h"
 #include"windows.h"
 
-Gardener::Gardener():PlantingPoint(Point(0,0))
+Gardener::Gardener():PlantingPoint(Point(ScreenWidth/2 - 1,ScreenHeight/2 - 1))
 {
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
 		SourceChecking[i] =0;
 	}
-
 }
 
 Point Gardener::getPlantingPoint() const
@@ -27,7 +26,7 @@ std::vector<std::vector<Medium>*> Gardener::getCompoundMedium() const
 
 void Gardener::SelectPosition()
 {
-	double MovingSpeed = 2;//移动速度为2 pixel per sec
+	double MovingSpeed = 3;//移动速度为3 pixel per sec
 	
 	//向上: 按下“W”，且不超界，且此时没有按着“J”和“K”；
 	if ((GetAsyncKeyState((unsigned short)'W') & 0x8000)&&(PlantingPoint.getYPos()>0)&& !(GetAsyncKeyState((unsigned short)'J') & 0x8000)&& !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
