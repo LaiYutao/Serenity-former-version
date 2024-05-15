@@ -22,12 +22,12 @@ void Act(ScreenManager TheScreenManager)
 	//主循环
 	while (1) 
 	{
-		//获取ElapsedTime
+		//获取ElapsedTime(单位为毫秒)
 		tp2 = std::chrono::high_resolution_clock::now();
 		auto ElapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(tp2 - tp1).count();
 		tp1 = tp2;
 
-		//获取时间轴中当前时间
+		//获取时间轴中当前时间(单位为秒)
 		double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
 		
 		//TheDiscJockey检测是否处于静音模式
@@ -105,6 +105,18 @@ void Act(ScreenManager TheScreenManager)
 	}
 }
 
+//进入封面页前的操作提示指引
+void Tips()
+{
+	std::cout << std::endl;
+	std::cout << "游戏玩法请参见文件内附Introduction图片及说明文档" << std::endl;
+	std::cout << "进入封面页后（一开始是空白的），请用ctrl + 鼠标滚轮（向下滚动）调整画面，必要时可以拉伸侧边控制台窗口" << std::endl;
+	std::cout << "调整好画面后，可以欣赏一下动态封面" << std::endl;
+	std::cout << "进入游戏主画面后，觉得音乐诡异的话（也可以同时按JK键切换音乐模式），或者后期画面卡顿时，可以按M键静音" << std::endl;
+	std::cout << "按任意键进入封面页，即可开始调整画面" << std::endl;
+	system("pause");
+}
+
 //仅用于CoverPage()，用于覆盖动态的字母
 void AddCharacter(ScreenManager& TheScreenManager,std::vector<char> Character,int X, int Y) //由于本函数仅在下面CoverPage函数单一位置反复调用；故其实可以视为该函数本身的一部分，因此形参都用了大写开头
 {
@@ -126,6 +138,19 @@ void AddCharacter(ScreenManager& TheScreenManager,std::vector<char> Character,in
 	}
 }
 
+//仅用于CoverPage()，用于读取字母字符画文件
+void ReadFile(std::vector<char>& Character, std::string Directory)
+{
+	char c;
+	std::ifstream inFile(Directory);
+	while (inFile.get(c))
+	{
+		Character.push_back(c);
+	}
+	inFile.close();
+}
+
+//动态封面页
 void CoverPage(ScreenManager TheScreenManager)
 {
 	//读取背景文件
@@ -157,128 +182,46 @@ void CoverPage(ScreenManager TheScreenManager)
 	std::vector<char> tr; //向右倒的t
 	std::vector<char> yl; //向左倒的y
 	std::vector<char> yr; //向右倒的y
+	std::vector<char> tips; //提示词
 
 	//读取字母文件：读取
 	{
-		std::ifstream inFile1("txtfile\\character\\S l.txt");
-		char lS;
-		while (inFile1.get(lS))
-		{
-			Sl.push_back(lS);
-		}
-		inFile1.close();
-
-		std::ifstream inFile2("txtfile\\character\\S r.txt");
-		char rS;
-		while (inFile2.get(rS))
-		{
-			Sr.push_back(rS);
-		}
-		inFile2.close();
-
-		std::ifstream inFile3("txtfile\\character\\e l.txt");
-		char le;
-		while (inFile3.get(le))
-		{
-			el.push_back(le);
-		}
-		inFile3.close();
-
-		std::ifstream inFile4("txtfile\\character\\e r.txt");
-		char re;
-		while (inFile4.get(re))
-		{
-			er.push_back(re);
-		}
-		inFile4.close();
-
-		std::ifstream inFile5("txtfile\\character\\r l.txt");
-		char lr;
-		while (inFile5.get(lr))
-		{
-			rl.push_back(lr);
-		}
-		inFile5.close();
-
-		std::ifstream inFile6("txtfile\\character\\r r.txt");
-		char r;
-		while (inFile6.get(r))
-		{
-			rr.push_back(r);
-		}
-		inFile6.close();
-
-		std::ifstream inFile7("txtfile\\character\\n l.txt");
-		char ln;
-		while (inFile7.get(ln))
-		{
-			nl.push_back(ln);
-		}
-		inFile7.close();
-
-		std::ifstream inFile8("txtfile\\character\\n r.txt");
-		char rn;
-		while (inFile8.get(rn))
-		{
-			nr.push_back(rn);
-		}
-		inFile8.close();
-
-		std::ifstream inFile9("txtfile\\character\\i l.txt");
-		char li;
-		while (inFile9.get(li))
-		{
-			il.push_back(li);
-		}
-		inFile9.close();
-
-		std::ifstream inFilea("txtfile\\character\\i r.txt");
-		char ri;
-		while (inFilea.get(ri))
-		{
-			ir.push_back(ri);
-		}
-		inFilea.close();
-
-		std::ifstream inFileb("txtfile\\character\\t l.txt");
-		char lt;
-		while (inFileb.get(lt))
-		{
-			tl.push_back(lt);
-		}
-		inFileb.close();
-
-		std::ifstream inFilec("txtfile\\character\\t r.txt");
-		char rt;
-		while (inFilec.get(rt))
-		{
-			tr.push_back(rt);
-		}
-		inFilec.close();
-
-		std::ifstream inFiled("txtfile\\character\\y l.txt");
-		char ly;
-		while (inFiled.get(ly))
-		{
-			yl.push_back(ly);
-		}
-		inFiled.close();
-
-		std::ifstream inFilee("txtfile\\character\\y r.txt");
-		char ry;
-		while (inFilee.get(ry))
-		{
-			yr.push_back(ry);
-		}
-		inFilee.close();
+		ReadFile(Sl, "txtfile\\character\\S l.txt");
+		ReadFile(Sr, "txtfile\\character\\S r.txt");
+		ReadFile(el, "txtfile\\character\\e l.txt");
+		ReadFile(er, "txtfile\\character\\e r.txt");
+		ReadFile(rl, "txtfile\\character\\r l.txt");
+		ReadFile(rr, "txtfile\\character\\r r.txt");
+		ReadFile(nl, "txtfile\\character\\n l.txt");
+		ReadFile(nr, "txtfile\\character\\n r.txt");
+		ReadFile(il, "txtfile\\character\\i l.txt");
+		ReadFile(ir, "txtfile\\character\\i r.txt");
+		ReadFile(tl, "txtfile\\character\\t l.txt");
+		ReadFile(tr, "txtfile\\character\\t r.txt");
+		ReadFile(yl, "txtfile\\character\\y l.txt");
+		ReadFile(yr, "txtfile\\character\\y r.txt");
+		ReadFile(tips, "txtfile\\Tips.txt");
 	}
 	
 	bool Out = false;
-	bool KeySpacePressed = false;
+	bool KeySpacePressed = true;//防止上来就按着SPACE，直接把封面跳过了
+
+	//设定时间原点
+	double TimeOrigin = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+	double TimeOfNow = 0;
+
+	//写入静态BackGround
+	TheScreenManager.getRefScreenBuffer() = BackGround;
+
+	//"PRESS SPACE TO CONTINUE"是否显示；因为要做闪烁的提示词
+	bool IfShowPressSpace = true;
 
 	//输出Page
 	while (Out == false)
 	{
+		//获取时间轴中当前时间(单位为秒)
+		TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
+		
 		//检查是否按下空格键
 		if (GetAsyncKeyState((unsigned short)' ') & 0x8000)
 		{
@@ -293,20 +236,18 @@ void CoverPage(ScreenManager TheScreenManager)
 			KeySpacePressed = false;
 		}
 		
-		//写入静态BackGround
-		TheScreenManager.getRefScreenBuffer() = BackGround;
-		
 		//写入字母
+		if(2*TimeOfNow-int(2*TimeOfNow)<=0.001) //离每0.5秒足够近，就变换一次；这样一来，也保证了空格检测的灵敏度；
 		{
-			//从尾之前，从y开始
-			if (rand() % 2)AddCharacter(TheScreenManager, yl, 185, 29); //y所应该出现的区域的左上角
-			else AddCharacter(TheScreenManager, yr, 185, 29);
+			//从尾到头，从y开始；（由于y尾部横向延伸比较大）
+			if (rand() % 2)AddCharacter(TheScreenManager, yl, 183, 29); //y所应该出现的区域的左上角
+			else AddCharacter(TheScreenManager, yr, 183, 29);
 
-			if (rand() % 2)AddCharacter(TheScreenManager, tl, 168, 25); //t所应该出现的区域的左上角
-			else AddCharacter(TheScreenManager, tr, 168, 25);
+			if (rand() % 2)AddCharacter(TheScreenManager, tl, 167, 27); //t所应该出现的区域的左上角
+			else AddCharacter(TheScreenManager, tr, 167, 27);
 
-			if (rand() % 2)AddCharacter(TheScreenManager, il, 154, 23); //i所应该出现的区域的左上角
-			else AddCharacter(TheScreenManager, ir, 154, 23);
+			if (rand() % 2)AddCharacter(TheScreenManager, il, 153, 25); //i所应该出现的区域的左上角
+			else AddCharacter(TheScreenManager, ir, 153, 25);
 
 			if (rand() % 2)AddCharacter(TheScreenManager, nl, 125, 29); //n所应该出现的区域的左上角
 			else AddCharacter(TheScreenManager, nr, 125, 29);
@@ -324,17 +265,35 @@ void CoverPage(ScreenManager TheScreenManager)
 			else AddCharacter(TheScreenManager, Sr, 30, 22);
 		}
 		
+		//写入PRESS SPACE提示词
+		if (4 * TimeOfNow - int(4 * TimeOfNow) <= 0.002) //每0.25秒闪一次
+		{
+			if (IfShowPressSpace == true) //如果有，就用空格覆盖
+			{
+				for (int i = 65 * ScreenWidth * 2;i < 69 * ScreenWidth * 2 + 2 * ScreenWidth - 1;++i)//提示词区域从（0,65）到（2*ScreenWidth-1,69）
+				{
+					TheScreenManager.getRefScreenBuffer()[i] = ' ';
+				}
+				IfShowPressSpace = false;
+			}
+			else //如果没有，就打上提示词
+			{
+				AddCharacter(TheScreenManager, tips, 0, 65);
+				IfShowPressSpace = true;
+			}
+		}
+
 		//输出页面
-		TheScreenManager.ShowImage();
-		//std::this_thread::sleep_for(std::chrono::milliseconds(500));  //又要让封面字母动得慢一点，又要让空格检测保证灵敏度
+		TheScreenManager.ShowStaticImage();
 	}
 }
 
+//开始前的过渡页
 void BridgePage(ScreenManager TheScreenManager)
 {
 	//设定时间原点
 	double TimeOrigin = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-	double TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
+	double TimeOfNow = 0;
 	//读取文件
 	std::ifstream inFile("txtfile\\BridgePage.txt");
 	char c;
@@ -345,14 +304,14 @@ void BridgePage(ScreenManager TheScreenManager)
 	inFile.close();
 
 	//设定此页持续时间
-	std::uniform_real_distribution<double> dis(0.2, 1.5);//比较随意的时间区间，从中随机选择，作为此页显示时间
+	std::uniform_real_distribution<double> dis(0.5, 1.5);//比较随意的时间区间，从中随机选择，作为此页显示时间
 	std::default_random_engine gen;
 	double Duration= dis(gen);
 
 	//输出page
 	while (TimeOfNow < Duration)
 	{
-		//获取时间轴中当前时间
+		//获取时间轴中当前时间(单位为秒)
 		TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
 		TheScreenManager.ShowStaticImage();
 	}
@@ -361,6 +320,7 @@ void BridgePage(ScreenManager TheScreenManager)
 
 int main() 
 {
+	Tips();
 	ScreenManager TheScreenManager;
 	CoverPage(TheScreenManager);
 	BridgePage(TheScreenManager);

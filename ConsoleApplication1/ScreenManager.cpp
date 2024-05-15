@@ -67,4 +67,3 @@ void ScreenManager::SetEmptyBuffer()
 {
     std::vector<char>().swap(ScreenBuffer);//ÖÃ¿Õ²¢ÊÍ·ÅÄÚ´æ
 }
-

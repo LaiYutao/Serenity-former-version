@@ -1,7 +1,7 @@
 #include "Gardener.h"
 #include"windows.h"
 
-Gardener::Gardener():PlantingPoint(Point(ScreenWidth/2 - 1,ScreenHeight/2 - 1))
+Gardener::Gardener():PlantingPoint(Point(ScreenWidth/2 - 1,ScreenHeight/2 - 6 )) //初始点在中间偏上的位置
 {
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
@@ -209,5 +209,3 @@ void Gardener::AdjustFrequency(int plantX, int plantY)
 		KeySPressed = false;
 	}
 }
-
-
