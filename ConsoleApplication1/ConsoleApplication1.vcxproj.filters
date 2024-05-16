@@ -15,42 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CircularField.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Point.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Field.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Medium.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="RayTip.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ScreenManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Gardener.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SpiralField.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Monitor.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DiscJockey.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Point.h">
+    <ClInclude Include="CircularField.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DiscJockey.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Field.h">
@@ -59,26 +27,58 @@
     <ClInclude Include="Medium.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CircularField.h">
+    <ClInclude Include="Monitor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Gardener.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ScreenManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DiscJockey.h">
+    <ClInclude Include="Point.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="RayTip.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ScreenManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="SpiralField.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Monitor.h">
+    <ClInclude Include="Gardener.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CircularField.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DiscJockey.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Field.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Gardener.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Medium.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Monitor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RayTip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SpiralField.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

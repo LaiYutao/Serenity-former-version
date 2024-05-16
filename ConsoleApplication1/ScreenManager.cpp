@@ -15,11 +15,8 @@ void ScreenManager::ChangeBufferForm()
 	}
 }
 
-void ScreenManager::ShowImage()
+void ScreenManager::ShowActImage()
 {
-	//将vector<char>类型的ScreenBuffer一一赋值给char*类型的ScreenShow
-	ChangeBufferForm();
-
 	//使用Windows API库函数进行输出
 	DWORD dwBytesWritten = 0;
 	WriteConsoleOutputCharacterA(hConsole,ScreenShow, 2 * ScreenWidth * ScreenHeight, { 0,0 }, &dwBytesWritten);
@@ -28,7 +25,7 @@ void ScreenManager::ShowImage()
 	SetEmptyBuffer();
 }
 
-void ScreenManager::ShowStaticImage() //不再每次都置空ScreenBuffer
+void ScreenManager::ShowPageImage() //不再每次都置空ScreenBuffer
 {
 	//将vector<char>类型的ScreenBuffer一一赋值给char*类型的ScreenShow
 	ChangeBufferForm();
@@ -46,6 +43,11 @@ std::vector<char>& ScreenManager::getRefScreenBuffer()
 std::vector<char> ScreenManager::getScreenBuffer()
 {
     return ScreenBuffer;
+}
+
+char*& ScreenManager::getRefScreenShow()
+{
+	return ScreenShow;
 }
 
 //char* ScreenManager::getScreenShow() const

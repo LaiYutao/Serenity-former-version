@@ -82,6 +82,9 @@ void Act(ScreenManager TheScreenManager)
 		//TheMonitor加上PlantingPoint的显示
 		TheMonitor.AddPlantingPoint(TheScreenManager.getRefScreenBuffer(), TheGardener.getPlantingPoint());
 
+		//TheMonitor加上状态栏的显示
+		TheMonitor.AddStatusBar(TheScreenManager.getScreenBuffer(),TheScreenManager.getRefScreenShow(),TheGardener.getPlantingPoint(),TheGardener.getNumOfCircularField(),TheGardener.getNumOfSpiralField());
+
 		//TheDiscJockey接收CompoundHeight
 		TheDiscJockey.CalculateHeightDistribution(TheMonitor.getCompoundHeight());
 		
@@ -95,7 +98,7 @@ void Act(ScreenManager TheScreenManager)
 		}
 		
 		//TheScreenManager输出图像
-		TheScreenManager.ShowImage();
+		TheScreenManager.ShowActImage();
 
 		// 控制帧率；
 		if (ElapsedTime < FrameTime)//单位为毫秒
@@ -213,6 +216,19 @@ void CoverPage(ScreenManager TheScreenManager)
 	//写入静态BackGround
 	TheScreenManager.getRefScreenBuffer() = BackGround;
 
+	//加入随机显示的星点，丰富画面
+	std::srand(std::time(0));
+	for (int i = 0;i < 1000;++i)
+	{
+		int X = std::rand() % (ScreenWidth * 2);
+		int Y = std::rand() % ScreenHeight;
+
+		if (!(((X >= 73) && (X <= 158) && (Y >= 45) && (Y <= 49)) || ((X >= 60) && (X <= 172) && (Y >= 55) && (Y <= 62)))) //避免遮挡文字
+		{
+			TheScreenManager.getRefScreenBuffer()[Y * ScreenWidth * 2 + X] = 'o';
+		}
+	}
+
 	//"PRESS SPACE TO CONTINUE"是否显示；因为要做闪烁的提示词
 	bool IfShowPressSpace = true;
 
@@ -284,7 +300,7 @@ void CoverPage(ScreenManager TheScreenManager)
 		}
 
 		//输出页面
-		TheScreenManager.ShowStaticImage();
+		TheScreenManager.ShowPageImage();
 	}
 }
 
@@ -313,9 +329,8 @@ void BridgePage(ScreenManager TheScreenManager)
 	{
 		//获取时间轴中当前时间(单位为秒)
 		TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
-		TheScreenManager.ShowStaticImage();
+		TheScreenManager.ShowPageImage();
 	}
-	TheScreenManager.SetEmptyBuffer();
 }
 
 int main() 

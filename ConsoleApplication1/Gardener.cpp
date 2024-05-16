@@ -1,4 +1,4 @@
-#include "Gardener.h"
+#include"Gardener.h"
 #include"windows.h"
 
 Gardener::Gardener():PlantingPoint(Point(ScreenWidth/2 - 1,ScreenHeight/2 - 6 )) //初始点在中间偏上的位置
@@ -7,11 +7,24 @@ Gardener::Gardener():PlantingPoint(Point(ScreenWidth/2 - 1,ScreenHeight/2 - 6 ))
 	{
 		SourceChecking[i] =0;
 	}
+
+	NumOfCircularField = 0;
+	NumOfSpiralField = 0;
 }
 
 Point Gardener::getPlantingPoint() const
 {
 	return PlantingPoint;
+}
+
+int Gardener::getNumOfCircularField() const
+{
+	return NumOfCircularField;
+}
+
+int Gardener::getNumOfSpiralField() const
+{
+	return NumOfSpiralField;
 }
 
 std::vector<Field*>& Gardener::getRefCompoundField()
@@ -91,16 +104,20 @@ void Gardener::PlantIt(const double& timeOfNow)
 	{
 		if ((GetAsyncKeyState((unsigned short)'J') & 0x8000)&& !KeyJPressed && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
 		{
+			//按下J键，种下CircularField
 			CompoundField.push_back(new CircularField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
 			CompoundMedium.push_back(CompoundField[CompoundField.size()-1]->getPtrMediumLayer());
 			SourceChecking[PlantY * ScreenWidth + PlantX] = CompoundField.size();//记录此时创建的场的序号，从“1”开始
+			NumOfCircularField++;
 			KeyJPressed = true;//防止刚创建就开始调节参数；而应该先放开一下，再考虑是否开始调节
 		}
 		else if ((GetAsyncKeyState((unsigned short)'K') & 0x8000)&& !KeyKPressed && !(GetAsyncKeyState((unsigned short)'J') & 0x8000))
 		{
+			//按下K键，种下SpiralField
 			CompoundField.push_back(new SpiralField(timeOfNow, PlantingPoint, DefaultAmplitude, DefaultFrequency, DefaultInitialPhase, DefaultSpeed));
 			CompoundMedium.push_back(CompoundField[CompoundField.size() - 1]->getPtrMediumLayer());
 			SourceChecking[PlantY * ScreenWidth + PlantX] = CompoundField.size();//记录此时创建的场的序号，从“1”开始
+			NumOfSpiralField++;
 			KeyKPressed = true;
 		}
 		else return;

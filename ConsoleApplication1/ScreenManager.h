@@ -17,11 +17,11 @@ class ScreenManager
 public:
     ScreenManager();
     void ChangeBufferForm();
-    void ShowImage();
-    void ShowStaticImage(); //对于每帧显示一样的东西，每次显示后不清空ScreenBuffer
+    void ShowActImage();
+    void ShowPageImage(); // 每次显示后不清空ScreenBuffer
     std::vector<char>& getRefScreenBuffer();
     std::vector<char> getScreenBuffer();
-    //char* getScreenShow()const;
+    char*& getRefScreenShow();
     //HANDLE& get_hConsole();
     void setScreenShow(char* screen);
     void SetEmptyBuffer();

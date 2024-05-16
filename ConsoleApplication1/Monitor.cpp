@@ -79,3 +79,19 @@ void Monitor::AddPlantingPoint(std::vector<char>& buffer, const Point& plantingP
 	buffer[2 * (PlantY * ScreenWidth + PlantX)] = '<';
 	buffer[2 * (PlantY * ScreenWidth + PlantX) + 1] = '>';
 }
+
+void Monitor::AddStatusBar(std::vector<char> buffer,char*& screenShow,const Point& plantingPoint, const int& numOfCircularField, const int& numOfSpiralField)
+{
+	//将最底下一行清空
+	for (int i = (ScreenHeight - 1) * ScreenWidth*2;i < ScreenHeight * ScreenWidth*2;++i)
+	{
+		buffer[i] = ' ';
+	}
+	
+	for (int i = 0;i < 2 * ScreenWidth * ScreenHeight;++i)
+	{
+		screenShow[i] = buffer[i];
+	}
+
+	sprintf_s(&screenShow[(ScreenHeight - 1) * ScreenWidth*2], ScreenWidth, "PlantPoint: X=%3.2f, Y=%3.2f;  NumOfFields: CircularField=%2.i, SpiralField=%2.i, Total=%2.i", plantingPoint.getXPos(), plantingPoint.getYPos(), numOfCircularField, numOfSpiralField, numOfCircularField + numOfSpiralField);
+}
