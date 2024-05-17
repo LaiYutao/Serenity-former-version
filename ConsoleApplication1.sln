@@ -5,8 +5,6 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serenity", "ConsoleApplication1\ConsoleApplication1.vcxproj", "{4F9FE38E-9948-4E58-A521-49EA38C6D962}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Serenity v1.1", "Serenity v1.1\Serenity v1.1.vdproj", "{DD9B8B10-8BEA-41D1-B8D2-E945BE2C7DFC}"
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Serenity v2.0", "Serenity v2.0\Serenity v2.0.vdproj", "{62F8B3AE-4AFE-43E1-8300-88204787C196}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{4F9FE38E-9948-4E58-A521-49EA38C6D962}.Release|x64.Build.0 = Release|x64
 		{4F9FE38E-9948-4E58-A521-49EA38C6D962}.Release|x86.ActiveCfg = Release|Win32
 		{4F9FE38E-9948-4E58-A521-49EA38C6D962}.Release|x86.Build.0 = Release|Win32
-		{DD9B8B10-8BEA-41D1-B8D2-E945BE2C7DFC}.Debug|x64.ActiveCfg = Debug
-		{DD9B8B10-8BEA-41D1-B8D2-E945BE2C7DFC}.Debug|x86.ActiveCfg = Debug
-		{DD9B8B10-8BEA-41D1-B8D2-E945BE2C7DFC}.Release|x64.ActiveCfg = Release
-		{DD9B8B10-8BEA-41D1-B8D2-E945BE2C7DFC}.Release|x86.ActiveCfg = Release
 		{62F8B3AE-4AFE-43E1-8300-88204787C196}.Debug|x64.ActiveCfg = Debug
 		{62F8B3AE-4AFE-43E1-8300-88204787C196}.Debug|x86.ActiveCfg = Debug
 		{62F8B3AE-4AFE-43E1-8300-88204787C196}.Release|x64.ActiveCfg = Release
