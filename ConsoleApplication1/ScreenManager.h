@@ -7,17 +7,19 @@
 #include <fstream>
 #include <cmath>
 #include <thread>
-#define ScreenWidth 240 //实际显示宽度为ScreenWidth*2，为了平衡长宽问题，所以游戏里每一个单位，都用两个字符表示。（避免圆显示得像椭圆）
-#define ScreenHeight 75
-#define FontWidth 5 
-#define FontHeight 5
+//以下宏常量都是针对游戏主画面的（不含封面页、过渡页）
+#define ScreenWidth 240 //游戏主画面的宽
+#define ScreenHeight 150 //游戏主画面的高
+#define FontWidth 5 //游戏主画面的字宽
+#define FontHeight 5 //游戏主画面的字高
 #define FrameTime 100 //单位为毫秒
 #define GrayScale 13//灰度阶阶数，直接影响细腻程度
 
 class ScreenManager
 {
 public:
-    ScreenManager();
+    //默认参数为游戏主画面的参数
+    ScreenManager(int screenWidth= ScreenWidth,int screenHeight= ScreenHeight,int fontWidth= FontWidth,int fontHeight= FontHeight);
     void ChangeBufferForm();
     void ShowActImage();
     void ShowPageImage(); // 每次显示后不清空ScreenBuffer
@@ -28,10 +30,18 @@ public:
     void setScreenShow(char* screen);
     void SetEmptyBuffer();
 
+    int getScreenWidth()const;
+    int getScreenHeight()const;
+
 private:
     HANDLE hConsole;
     SMALL_RECT rectWindow;
     char* ScreenShow;
     std::vector<char> ScreenBuffer;
+    //用于游戏主画面之外画面的控制台宽高、字体宽高设置用私有成员，加m以示区分；
+    int m_ScreenWidth;
+    int m_ScreenHeight;
+    int m_FontWidth;
+    int m_FontHeight;
 };
 #endif // SCREENMANAGER_H

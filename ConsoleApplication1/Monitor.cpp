@@ -36,17 +36,15 @@ void Monitor::ChangeIntoPixel(std::vector<char>& buffer)
 		if(ShownHeight + Offset>GrayScale-1)
 		{
 			buffer.push_back('@');
-			//buffer.push_back('@'); // push back两个相同元素，以抵消元素高度宽度的不同导致的圆显示成椭圆的问题
 		}
 		else if(ShownHeight + Offset < 0)
 		{
 			buffer.push_back(' ');
-			//buffer.push_back(' ');
 		}
 		else
 		{
 			buffer.push_back(" .,:;*o%&#H$@"[ShownHeight + Offset]); //经过实验得出来的灰度阶序列，基本准确；
-			//buffer.push_back(" .,:;*o%&#H$@"[ShownHeight + Offset]); //同时十三个灰度阶，抛出Height==0对应的情况，刚好能对应十二个音，很方便进行音乐的映射
+                                                                     //同时十三个灰度阶，抛出Height==0对应的情况，刚好能对应十二个音，很方便进行音乐的映射
 		}
 	}
 }
@@ -75,10 +73,12 @@ void Monitor::AddPlantingPoint(std::vector<char>& buffer, const Point& plantingP
 		}
 	}
 	
-	////用“<>”来显示PlantingPoint的位置
-	//buffer[2 * (PlantY * ScreenWidth + PlantX)] = '<';
-	//buffer[2 * (PlantY * ScreenWidth + PlantX) + 1] = '>';
-	buffer[PlantY * ScreenWidth + PlantX] = 'Z';
+	//用四个‘+’围合PlantingPoint
+	buffer[(PlantY-1) * ScreenWidth + PlantX] = '+';
+	buffer[(PlantY+1) * ScreenWidth + PlantX] = '+';
+	buffer[PlantY * ScreenWidth + PlantX] = 'X';
+	buffer[PlantY  * ScreenWidth + PlantX-1] = '+';
+	buffer[PlantY  * ScreenWidth + PlantX+1] = '+';
 }
 
 void Monitor::AddStatusBar(std::vector<char> buffer,char*& screenShow,const Point& plantingPoint, const int& numOfCircularField, const int& numOfSpiralField)

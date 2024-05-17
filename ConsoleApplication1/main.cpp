@@ -220,12 +220,12 @@ void CoverPage(ScreenManager TheScreenManager)
 	std::srand(std::time(0));
 	for (int i = 0;i < 1000;++i)
 	{
-		int X = std::rand() % (ScreenWidth);
-		int Y = std::rand() % ScreenHeight;
+		int X = std::rand() % TheScreenManager.getScreenWidth();
+		int Y = std::rand() % TheScreenManager.getScreenHeight();
 
 		if (!(((X >= 73) && (X <= 158) && (Y >= 45) && (Y <= 49)) || ((X >= 60) && (X <= 172) && (Y >= 55) && (Y <= 62)))) //避免遮挡文字
 		{
-			TheScreenManager.getRefScreenBuffer()[Y * ScreenWidth + X] = 'o';
+			TheScreenManager.getRefScreenBuffer()[Y * TheScreenManager.getScreenWidth() + X] = 'o';
 		}
 	}
 
@@ -286,7 +286,7 @@ void CoverPage(ScreenManager TheScreenManager)
 		{
 			if (IfShowPressSpace == true) //如果有，就用空格覆盖
 			{
-				for (int i = 65 * ScreenWidth ;i < 69 * ScreenWidth +ScreenWidth - 1;++i)//提示词区域从（0,65）到（2*ScreenWidth-1,69）
+				for (int i = 65 * TheScreenManager.getScreenWidth();i < 69 * TheScreenManager.getScreenWidth() + TheScreenManager.getScreenWidth() - 1;++i)//提示词区域从（0,65）到（ScreenWidth-1,69）
 				{
 					TheScreenManager.getRefScreenBuffer()[i] = ' ';
 				}
@@ -336,9 +336,10 @@ void BridgePage(ScreenManager TheScreenManager)
 int main() 
 {
 	Tips();
+	ScreenManager PageManager(ScreenWidth, ScreenHeight / 2, FontWidth, FontHeight * 2);
+	CoverPage(PageManager);
+	BridgePage(PageManager);
 	ScreenManager TheScreenManager;
-	CoverPage(TheScreenManager);
-	BridgePage(TheScreenManager);
 	Act(TheScreenManager);
 	return 0;
 }
