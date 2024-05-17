@@ -3,11 +3,12 @@
 
 Gardener::Gardener():PlantingPoint(Point(ScreenWidth/2 -1,ScreenHeight/2 - 6 )) //初始点在中间偏上的位置
 {
+	//一开始，每个点都没有被种下过场,各变量都置零
 	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
 	{
 		SourceChecking[i] =0;
 	}
-
+	CompoundHeight.resize(ScreenWidth * ScreenHeight, 0);
 	NumOfCircularField = 0;
 	NumOfSpiralField = 0;
 }
@@ -27,14 +28,30 @@ int Gardener::getNumOfSpiralField() const
 	return NumOfSpiralField;
 }
 
+std::vector<double> Gardener::getCompoundHeight() const
+{
+	return CompoundHeight;
+}
+
 std::vector<Field*>& Gardener::getRefCompoundField()
 {
 	return CompoundField;
 }
 
-std::vector<std::vector<Medium>*> Gardener::getCompoundMedium() const
+void Gardener::UpdateCompoundHeight()
 {
-	return CompoundMedium;
+	//先进行重置
+	CompoundHeight.clear();
+	CompoundHeight.resize(ScreenWidth * ScreenHeight, 0);
+
+	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
+	{
+		for (std::vector<Medium>* mediumLayerPtr : CompoundMedium)
+		{
+			//把各Medium层的Height叠加起来
+			CompoundHeight[i] += (*mediumLayerPtr)[i].getHeight();
+		}
+	}
 }
 
 void Gardener::SelectPosition()

@@ -178,13 +178,21 @@ void DiscJockey::MakeClusters(const double& kDuration)
 	{
 		double t = (double)i / wfx.nSamplesPerSec; // 取细分的时间
 		double Intensity = 0;
+		double NumOfNote = 0;
 		//十二音叠上去；由于用的是正弦函数，Height==0对应的0赫兹，对应的振幅就直接是零，很方便
 		for (int j = 0;j < 13;j++)
 		{
+			//如果对应高度没有点，就直接跳
+			if (HeightDistribution[j] == 0)continue;
+
+			//只取数量比较多的前几个音来发声，否则图形复杂时计算量太大，音效也不好（其实就算都正常地发出来了，一般听众可能也听不出来）
+			if ((NumOfNote>=3) && (HeightDistribution[j] <= ScreenWidth * ScreenHeight / 6)) continue; //3个基音以下，照常按顺序计算；3个及以上后，需要有一定的筛选
+			
 			//第一项是基音，后面加了四项泛音（由网上搜索的频谱图换算而来），试图粗略地模拟钢琴音色
 			Intensity += HeightDistribution[j]*sin(TwelveToneSeries[j]* 2*PI * t) + 
 			0.1*HeightDistribution[j] * sin(TwelveToneSeries[j]* 2 * 2 * PI * t) + 0.056 * HeightDistribution[j] * sin(TwelveToneSeries[j] * 3 * 2 * PI * t)+
 			0.042 * HeightDistribution[j] * sin(TwelveToneSeries[j] * 4 * 2 * PI * t)+ 0.037 * HeightDistribution[j] * sin(TwelveToneSeries[j] *5 * 2 * PI * t);
+			NumOfNote++;
 		}
 		
 		Intensity /= ScreenWidth * ScreenHeight; //振幅取均值

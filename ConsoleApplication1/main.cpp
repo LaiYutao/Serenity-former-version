@@ -43,12 +43,12 @@ void Act(ScreenManager TheScreenManager)
 			if (TheDiscJockey.getMusicType() == true)
 			{
 				//十二音音簇模式
-				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(0.4*FrameTime); }); 
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(0.3*FrameTime); }); 
 			}
 			else
 			{
 				//微分白噪音模式
-				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(0.4*FrameTime); });
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(0.3*FrameTime); });
 			}
 		}
 
@@ -73,8 +73,11 @@ void Act(ScreenManager TheScreenManager)
 			}
 		}
 
-		//TheMonitor处理各Medium层的叠加
-		TheMonitor.UpdateCompoundHeight(TheGardener.getCompoundMedium());
+		//TheGardener更新CompoundHeight
+		TheGardener.UpdateCompoundHeight();
+
+		//TheMonitor接受更新后的CompoundHeight
+		TheMonitor.SetCompoundHeight(TheGardener.getCompoundHeight());
 
 		//TheMonitor将Height转化为字符
 		TheMonitor.ChangeIntoPixel(TheScreenManager.getRefScreenBuffer());
@@ -86,7 +89,7 @@ void Act(ScreenManager TheScreenManager)
 		TheMonitor.AddStatusBar(TheScreenManager.getScreenBuffer(),TheScreenManager.getRefScreenShow(),TheGardener.getPlantingPoint(),TheGardener.getNumOfCircularField(),TheGardener.getNumOfSpiralField());
 
 		//TheDiscJockey接收CompoundHeight
-		TheDiscJockey.CalculateHeightDistribution(TheMonitor.getCompoundHeight());
+		TheDiscJockey.CalculateHeightDistribution(TheGardener.getCompoundHeight());
 		
 		//TheDiscJockey计算在微分白噪音模式下发出赫兹
 		TheDiscJockey.CalculateHertz();
@@ -253,8 +256,8 @@ void CoverPage(ScreenManager TheScreenManager)
 		}
 		
 		//写入字母
-		if(2*TimeOfNow-int(2*TimeOfNow)<=0.001) //离每0.5秒足够近，就变换一次；这样一来，也保证了空格检测的灵敏度；
-		{
+		if(2*TimeOfNow-int(2*TimeOfNow)<=0.002) //理论上离每0.5秒足够近，就变换一次；这样一来，也保证了空格检测的灵敏度；
+		{                                       //（实际上，由于没有控制帧率，会有所偏差，但对于封面页没什么所谓，还增加了随机性）
 			//从尾到头，从y开始；（由于y尾部横向延伸比较大）
 			if (rand() % 2)AddCharacter(TheScreenManager, yl, 183, 29); //y所应该出现的区域的左上角
 			else AddCharacter(TheScreenManager, yr, 183, 29);
@@ -282,7 +285,7 @@ void CoverPage(ScreenManager TheScreenManager)
 		}
 		
 		//写入PRESS SPACE提示词
-		if (4 * TimeOfNow - int(4 * TimeOfNow) <= 0.002) //每0.25秒闪一次
+		if (4 * TimeOfNow - int(4 * TimeOfNow) <= 0.004) //理论每0.25秒闪一次（实际上，由于没有控制帧率，会有所偏差，但对于封面页没什么所谓，还增加了随机性）
 		{
 			if (IfShowPressSpace == true) //如果有，就用空格覆盖
 			{

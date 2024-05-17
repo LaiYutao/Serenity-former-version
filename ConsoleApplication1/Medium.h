@@ -5,7 +5,7 @@
 #include<cmath>
 
 class Medium  
-{//到时将整个地图的每个像素都创建为Medium，用数组迭代；
+{
 public:
 	Medium(const double& sourceCreationTime=0);
 	virtual ~Medium() {};

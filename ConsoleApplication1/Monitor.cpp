@@ -10,20 +10,9 @@ std::vector<double> Monitor::getCompoundHeight() const
 	return CompoundHeight;
 }
 
-void Monitor::UpdateCompoundHeight(const std::vector<std::vector<Medium>*>& compoundMedium)
+void Monitor::SetCompoundHeight(const std::vector<double>& compoundHeight)
 {
-	//先进行重置
-	CompoundHeight.clear();
-	CompoundHeight.resize(ScreenWidth * ScreenHeight, 0);
-
-	for (int i = 0;i < ScreenWidth * ScreenHeight;++i)
-	{
-		for (std::vector<Medium>* mediumLayerPtr : compoundMedium)
-		{
-			//把各Medium层的Height叠加起来
-			CompoundHeight[i] += (*mediumLayerPtr)[i].getHeight();
-		}
-	}
+	CompoundHeight = compoundHeight;
 }
 
 void Monitor::ChangeIntoPixel(std::vector<char>& buffer)
@@ -74,11 +63,11 @@ void Monitor::AddPlantingPoint(std::vector<char>& buffer, const Point& plantingP
 	}
 	
 	//用四个‘+’围合PlantingPoint
-	buffer[(PlantY-1) * ScreenWidth + PlantX] = '+';
-	buffer[(PlantY+1) * ScreenWidth + PlantX] = '+';
+	buffer[(PlantY-1) * ScreenWidth + PlantX] = '-';
+	buffer[(PlantY+1) * ScreenWidth + PlantX] = '-';
 	buffer[PlantY * ScreenWidth + PlantX] = 'X';
-	buffer[PlantY  * ScreenWidth + PlantX-1] = '+';
-	buffer[PlantY  * ScreenWidth + PlantX+1] = '+';
+	buffer[PlantY  * ScreenWidth + PlantX-1] = '|';
+	buffer[PlantY  * ScreenWidth + PlantX+1] = '|';
 }
 
 void Monitor::AddStatusBar(std::vector<char> buffer,char*& screenShow,const Point& plantingPoint, const int& numOfCircularField, const int& numOfSpiralField)
@@ -94,5 +83,5 @@ void Monitor::AddStatusBar(std::vector<char> buffer,char*& screenShow,const Poin
 		screenShow[i] = buffer[i];
 	}
 
-	sprintf_s(&screenShow[(ScreenHeight - 1) * ScreenWidth], ScreenWidth, "PlantPoint: X=%3.2f, Y=%3.2f;  NumOfFields: CircularField=%2.i, SpiralField=%2.i, Total=%2.i  ", plantingPoint.getXPos(), plantingPoint.getYPos(), numOfCircularField, numOfSpiralField, numOfCircularField + numOfSpiralField);
+	sprintf_s(&screenShow[(ScreenHeight - 1) * ScreenWidth], ScreenWidth, "  PlantPoint: X=%3.2f, Y=%3.2f;  NumOfFields: CircularField=%2.i, SpiralField=%2.i, Total=%2.i  ", plantingPoint.getXPos(), plantingPoint.getYPos(), numOfCircularField, numOfSpiralField, numOfCircularField + numOfSpiralField);
 }
