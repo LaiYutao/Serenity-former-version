@@ -4,7 +4,7 @@ Medium::Medium(const double& sourceCreationTime):SourceCreationTime(sourceCreati
 {
 }
 
-//介质被激活，接受“场”的参数
+//介质被激活，接受场源的参数
 void Medium::GetActivated(const double& timeOfNow, const double& newAmplitude, const double& newFrequency, const double& newInitialPhase)
 {
     //计算并设置振动方程参数（t=timeOfNow时的情况）  

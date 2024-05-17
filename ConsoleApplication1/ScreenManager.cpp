@@ -4,15 +4,17 @@ ScreenManager::ScreenManager(int screenWidth, int screenHeight, int fontWidth, i
 {
 	ScreenShow = new char[m_ScreenWidth * m_ScreenHeight];
 	hConsole = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	CONSOLE_SCREEN_BUFFER_INFOEX csbi;
+	
+	//先缩到最小，便于之后调整
 	rectWindow = { 0, 0, 1, 1 };
-	csbi.srWindow = rectWindow;
-	csbi.dwSize = { 1,1 };
-	//SetConsoleScreenBufferInfoEx(hConsole, &csbi);
 	SetConsoleWindowInfo(hConsole, TRUE, &rectWindow);
+	
+	//设置Buffer大小
 	COORD BufferSize = { (short)m_ScreenWidth, (short)m_ScreenHeight };
 	SetConsoleScreenBufferSize(hConsole, BufferSize);
 	SetConsoleActiveScreenBuffer(hConsole);
+	
+	//设置字体属性
 	CONSOLE_FONT_INFOEX cfi;
 	cfi.cbSize = sizeof(cfi);
 	cfi.nFont = 0;
@@ -22,11 +24,9 @@ ScreenManager::ScreenManager(int screenWidth, int screenHeight, int fontWidth, i
 	cfi.FontWeight = FW_NORMAL;
 	wcscpy_s(cfi.FaceName, L"Consolas");
 	SetCurrentConsoleFontEx(hConsole, false, &cfi);
+	
+	//设置控制台窗口的物理长宽
 	rectWindow = { 0, 0, short(m_ScreenWidth - 1), short(m_ScreenHeight - 1) };
-	csbi.srWindow = rectWindow;
-	csbi.dwSize = BufferSize;
-	csbi.dwMaximumWindowSize = { (short)m_ScreenWidth,(short)m_ScreenHeight };
-	//SetConsoleScreenBufferInfoEx(hConsole, &csbi);
 	SetConsoleWindowInfo(hConsole, TRUE, &rectWindow);
 
 }
@@ -73,16 +73,6 @@ char*& ScreenManager::getRefScreenShow()
 {
 	return ScreenShow;
 }
-
-//char* ScreenManager::getScreenShow() const
-//{
-//	return ScreenShow;
-//}
-
-//HANDLE& ScreenManager::get_hConsole()
-//{
-//	return hConsole;
-//}
 
 void ScreenManager::setScreenShow(char* screen)
 {

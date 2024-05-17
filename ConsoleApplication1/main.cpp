@@ -6,7 +6,7 @@
 #include<chrono>
 #include<random>
 
-//包含主loop在内的主干
+//包含主loop在内的主干，控制游戏主界面
 void Act(ScreenManager TheScreenManager)
 {
 	//设定时间原点
@@ -43,12 +43,12 @@ void Act(ScreenManager TheScreenManager)
 			if (TheDiscJockey.getMusicType() == true)
 			{
 				//十二音音簇模式
-				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(0.3*FrameTime); }); 
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(FrameTime*0.35); }); 
 			}
 			else
 			{
 				//微分白噪音模式
-				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(0.3*FrameTime); });
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(FrameTime*0.35); });
 			}
 		}
 
@@ -114,12 +114,43 @@ void Act(ScreenManager TheScreenManager)
 //进入封面页前的操作提示指引
 void Tips()
 {
-	std::cout << std::endl;
-	std::cout << "游戏玩法请参见文件内附Introduction图片及说明文档" << std::endl;
-	std::cout << "进入封面页后（一开始是空白的），请用ctrl + 鼠标滚轮（向下滚动）调整画面，必要时可以拉伸侧边控制台窗口" << std::endl;
-	std::cout << "调整好画面后，可以欣赏一下动态封面" << std::endl;
-	std::cout << "进入游戏主画面后，觉得音乐诡异的话（也可以同时按JK键切换音乐模式），或者后期画面卡顿时，可以按M键静音" << std::endl;
-	std::cout << "按任意键进入封面页，即可开始调整画面" << std::endl;
+	using namespace std;
+	cout << "\n基础设置：（win11操作系统）" << endl;
+	cout << "1.点击窗口上方标题栏中类似“V”的符号（偏左，在“+”右边），再点击设置。" << endl;
+	cout << "2.在“启动”选项中，在右侧第二行“默认终端应用程序”中，点击最右端类似“V”的按键，将选项设置为“Windows控制台主机”。" << endl;
+	cout << "3.设置完成。请关闭并重新启动此程序。" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "简介：（请先向上滑动鼠标滚轮，到页面最上方，查看“基础设置”并操作）" << endl;
+	cout<< "操纵PlantingPoint（一开始位于中央）进行移动，选择位置，种下场源（两种可选），并按需调节振幅或者频率。反复操作，创造出独一无二、不可复制的视听景观！" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "操作指南：（请先向上滑动鼠标滚轮，到页面最上方，查看“基础设置”并操作）" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "    W/S/A/D\t|控制PlantingPoint 向上/向下/向左/向右" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "       J\t|种下CircularField（圆形波场）" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "       K\t|种下SpiralField（螺旋形场）" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "  长按J+单点W\t|升高此位置的场对应振幅" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "  长按J+单点S\t|降低此位置的场对应振幅" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "  长按K+单点W\t|升高此位置的场对应频率" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "  长按K+单点S\t|降低此位置的场对应频率（频率为0则静止，为负则反向运动）" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "      J+K\t|切换音乐模式（两种可选）" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "       M\t|静音" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "     提示1\t|视设备性能不同，如果画面卡顿，可以按M键静音以缓解" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "     提示2\t|不要连续快速种下场源，按下按键后保持一下，并隔几秒再种另一个" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "     提示3\t|进入游戏主画面后（封面及过渡页之后），下方有一栏数据栏，可供查看" << endl;
+	cout << "-------------------------------------------------------------------------------------" << endl;
+	cout << "在接下来的游戏过程中，请不要调节窗口大小或者全屏，如不小心操作了，请关闭并重启程序" << endl;
+	cout << "Have a good time!" << endl;
 	system("pause");
 }
 
@@ -332,6 +363,7 @@ void BridgePage(ScreenManager TheScreenManager)
 	{
 		//获取时间轴中当前时间(单位为秒)
 		TimeOfNow = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - TimeOrigin;
+		//输出页面
 		TheScreenManager.ShowPageImage();
 	}
 }
@@ -339,7 +371,7 @@ void BridgePage(ScreenManager TheScreenManager)
 int main() 
 {
 	Tips();
-	ScreenManager PageManager(ScreenWidth, ScreenHeight / 2, FontWidth, FontHeight * 2);
+	ScreenManager PageManager(ScreenWidth, ScreenHeight / 2, FontWidth, FontHeight * 2);//窗口的物理长宽和游戏主画面一致
 	CoverPage(PageManager);
 	BridgePage(PageManager);
 	ScreenManager TheScreenManager;

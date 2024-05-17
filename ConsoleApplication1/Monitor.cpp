@@ -47,7 +47,7 @@ void Monitor::AddPlantingPoint(std::vector<char>& buffer, const Point& plantingP
 	int LessX = int(X);//向下取X，作为判断基准点X坐标
 	int LessY = int(Y);//向下取Y，作为判断基准点Y坐标
 	int PlantX = int(X);
-	int PlantY = int(Y);//先随便初始化
+	int PlantY = int(Y);//先比较随意地初始化
 	for (int x = LessX;x < LessX + 2;++x)
 	{
 		for (int y = LessY;y < LessY + 2;++y)
@@ -62,7 +62,7 @@ void Monitor::AddPlantingPoint(std::vector<char>& buffer, const Point& plantingP
 		}
 	}
 	
-	//用四个‘+’围合PlantingPoint
+	//围合PlantingPoint
 	buffer[(PlantY-1) * ScreenWidth + PlantX] = '-';
 	buffer[(PlantY+1) * ScreenWidth + PlantX] = '-';
 	buffer[PlantY * ScreenWidth + PlantX] = 'X';
@@ -78,6 +78,7 @@ void Monitor::AddStatusBar(std::vector<char> buffer,char*& screenShow,const Poin
 		buffer[i] = ' ';
 	}
 	
+	//转化数据类型，便于下一步的格式化：将vector<char>中元素一一赋值给char*
 	for (int i = 0;i <  ScreenWidth * ScreenHeight;++i)
 	{
 		screenShow[i] = buffer[i];

@@ -30,7 +30,7 @@ DiscJockey::DiscJockey()
 void DiscJockey::CalculateHeightDistribution(const std::vector<double>& compoundHeight)
 {
 	int Offset = (GrayScale - 1) / 2; //灰度阶字符串索引所需的偏移量
-	//计算分布，全部置为0
+	//计算分布前，先全部置为0
 	for (int i = 0;i < GrayScale;++i)
 	{
 		HeightDistribution[i] = 0;
@@ -54,7 +54,7 @@ void DiscJockey::CalculateHertz()
 {
 	CalculatedHertz = 0;
 
-	//简单的尝试1：直接算加权平均的频率；
+	//微分白噪音模式：直接算加权平均的频率；
 	for (int i = 0;i < 13;++i)
 	{
 		CalculatedHertz += HeightDistribution[i] * TwelveToneSeries[i];
@@ -115,6 +115,7 @@ void DiscJockey::DetectIfMute()
 	}
 }
 
+//下面两个发声的函数需要用到
 void CALLBACK waveOutProc(HWAVEOUT hwo, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2) {
 	if (uMsg == WOM_DONE) {
 	}
@@ -182,11 +183,11 @@ void DiscJockey::MakeClusters(const double& kDuration)
 		//十二音叠上去；由于用的是正弦函数，Height==0对应的0赫兹，对应的振幅就直接是零，很方便
 		for (int j = 0;j < 13;j++)
 		{
-			//如果对应高度没有点，就直接跳
+			//如果对应高度没有点，就直接跳过
 			if (HeightDistribution[j] == 0)continue;
 
 			//只取数量比较多的前几个音来发声，否则图形复杂时计算量太大，音效也不好（其实就算都正常地发出来了，一般听众可能也听不出来）
-			if ((NumOfNote>=3) && (HeightDistribution[j] <= ScreenWidth * ScreenHeight / 6)) continue; //3个基音以下，照常按顺序计算；3个及以上后，需要有一定的筛选
+			if ((NumOfNote>=3) && (HeightDistribution[j] <= ScreenWidth * ScreenHeight / 8)) continue; //3个基音以下，照常按顺序计算；3个及以上后，需要有一定的筛选
 			
 			//第一项是基音，后面加了四项泛音（由网上搜索的频谱图换算而来），试图粗略地模拟钢琴音色
 			Intensity += HeightDistribution[j]*sin(TwelveToneSeries[j]* 2*PI * t) + 
@@ -200,7 +201,7 @@ void DiscJockey::MakeClusters(const double& kDuration)
 		audioData[i] = static_cast<short>(Intensity); 
 	}
 
-	//刨除末端部分振幅，试图缓解振幅比较高的时候突然停止，频率骤减，发出像煤气灶的声音；可以理解为某种程度上的低通滤波器
+	//刨除末端部分振幅，试图缓解振幅比较高的时候突然停止，频率骤减，发出像煤气灶的声音；可以理解为某种程度上的低通滤波器（但效果没想象中好）
 	if(kDuration>10) //防止越界
 	{
 		double absminIntensity = 10000;

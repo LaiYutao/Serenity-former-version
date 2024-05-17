@@ -101,7 +101,7 @@ void Gardener::PlantIt(const double& timeOfNow)
 	int LessX = int(X);//向下取X，作为判断基准点X坐标
 	int LessY = int(Y);//向下取Y，作为判断基准点Y坐标
 	int PlantX = int(X);
-	int PlantY = int(Y);//先随便初始化
+	int PlantY = int(Y);//先比较随意地初始化
 	for (int x = LessX;x < LessX + 2;++x)
 	{
 		for (int y = LessY;y < LessY + 2;++y)

@@ -13,7 +13,7 @@ Field::Field(const double& creationTime, const Point& s_Position,const double& s
         IfActivated[i] = false;
     }
 
-    //初始化RayTip：以Source坐标为所有RayTip的初始坐标，并分配初始方向，初始距离为0
+    //初始化RayTip：以Source坐标为所有RayTip的初始坐标，并分配初始方向，初始距离均为0
     for (int i = 0;i < NumberOfRay;++i)
     {
         double DirectionAngle = i * (2 * PI / NumberOfRay);

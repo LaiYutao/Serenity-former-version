@@ -11,6 +11,7 @@ public:
 	virtual ~Medium() {};
 	void GetActivated(const double& timeOfNow, const double& newAmplitude, const double& newFrequency, const double& newInitialPhase);
 	void Vibrate(const double& timeOfNow);
+	
 	double getCurrentAmplitude() const;
 	double getCurrentFrequency() const;
 	double getCurrentInitialPhase() const;
