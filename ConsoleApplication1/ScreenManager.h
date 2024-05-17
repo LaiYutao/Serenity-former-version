@@ -7,8 +7,10 @@
 #include <fstream>
 #include <cmath>
 #include <thread>
-#define ScreenWidth 120 //实际显示宽度为ScreenWidth*2，为了平衡长宽问题，所以游戏里每一个单位，都用两个字符表示。（避免圆显示得像椭圆）
+#define ScreenWidth 240 //实际显示宽度为ScreenWidth*2，为了平衡长宽问题，所以游戏里每一个单位，都用两个字符表示。（避免圆显示得像椭圆）
 #define ScreenHeight 75
+#define FontWidth 5 
+#define FontHeight 5
 #define FrameTime 100 //单位为毫秒
 #define GrayScale 13//灰度阶阶数，直接影响细腻程度
 
@@ -28,6 +30,7 @@ public:
 
 private:
     HANDLE hConsole;
+    SMALL_RECT rectWindow;
     char* ScreenShow;
     std::vector<char> ScreenBuffer;
 };
