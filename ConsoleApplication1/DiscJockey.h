@@ -26,7 +26,7 @@ private:
 	//初始化十二音音列，从中央C开始的十二个音，中间项为0；
 	double TwelveToneSeries[13]=
 	{ 261.63,277.18,293.66,311.13,329.63,349.23,0,369.99,392.00,415.30,440.00,466.16,493.88 };
-	int HeightDistribution[GrayScale];
+	std::vector<int> HeightDistribution;
 	bool MusicTypeFlag;// true对应十二音音簇模式，false对应微分白噪音模式
 	bool IfMute;// 静音模式
 	double CalculatedHertz;// 计算结果储存于内部，使得计算和发声分离

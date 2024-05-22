@@ -43,12 +43,12 @@ void Act(ScreenManager TheScreenManager)
 			if (TheDiscJockey.getMusicType() == true)
 			{
 				//十二音音簇模式
-				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(FrameTime*0.35); }); 
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeClusters(FrameTime*0.4); }); 
 			}
 			else
 			{
 				//微分白噪音模式
-				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(FrameTime*0.35); });
+				MusicMode = std::thread([&TheDiscJockey, ElapsedTime]() { TheDiscJockey.MakeWhiteNoise(FrameTime*0.4); });
 			}
 		}
 

@@ -1,4 +1,5 @@
 #include "DiscJockey.h"
+#include <algorithm>
 
 DiscJockey::DiscJockey()
 {
@@ -7,10 +8,7 @@ DiscJockey::DiscJockey()
 	int Offset = (GrayScale - 1) / 2; //灰度阶字符串索引所需的偏移量
 	
 	//初始化：所有的Medium的Height均为0
-	for (int i = 0;i < GrayScale;++i)
-	{
-		HeightDistribution[i] = 0;
-	}
+	HeightDistribution.resize(GrayScale, 0);
 
 	HeightDistribution[0 + Offset] = ScreenWidth * ScreenHeight;
 
@@ -165,6 +163,7 @@ void DiscJockey::MakeWhiteNoise(const double& kDuration)
 	//写入并播放
 	result = waveOutPrepareHeader(hWaveOut, &header, sizeof(WAVEHDR));
 	result = waveOutWrite(hWaveOut, &header, sizeof(WAVEHDR));
+	
 }
 
 void DiscJockey::MakeClusters(const double& kDuration)
@@ -180,20 +179,25 @@ void DiscJockey::MakeClusters(const double& kDuration)
 		double t = (double)i / wfx.nSamplesPerSec; // 取细分的时间
 		double Intensity = 0;
 		double NumOfNote = 0;
-		//十二音叠上去；由于用的是正弦函数，Height==0对应的0赫兹，对应的振幅就直接是零，很方便
+		//选取十二音并叠上去；由于用的是正弦函数，Height==0对应的0赫兹，对应的振幅就直接是零，很方便
+		int min = 5;//输出高度分布前五大的音，降低音的复杂度；也减少计算量
+		//创建一个副本用来找第min大的元素
+		std::vector<int> SortHD = HeightDistribution;
+		// 找到第 min 大的元素，并将其放置到正确位置
+		std::nth_element(SortHD.begin(), SortHD.begin() + min-1, SortHD.end(), std::greater<int>());
 		for (int j = 0;j < 13;j++)
 		{
 			//如果对应高度没有点，就直接跳过
 			if (HeightDistribution[j] == 0)continue;
-
-			//只取数量比较多的前几个音来发声，否则图形复杂时计算量太大，音效也不好（其实就算都正常地发出来了，一般听众可能也听不出来）
-			if ((NumOfNote>=3) && (HeightDistribution[j] <= ScreenWidth * ScreenHeight / 8)) continue; //3个基音以下，照常按顺序计算；3个及以上后，需要有一定的筛选
-			
-			//第一项是基音，后面加了四项泛音（由网上搜索的频谱图换算而来），试图粗略地模拟钢琴音色
-			Intensity += HeightDistribution[j]*sin(TwelveToneSeries[j]* 2*PI * t) + 
-			0.1*HeightDistribution[j] * sin(TwelveToneSeries[j]* 2 * 2 * PI * t) + 0.056 * HeightDistribution[j] * sin(TwelveToneSeries[j] * 3 * 2 * PI * t)+
-			0.042 * HeightDistribution[j] * sin(TwelveToneSeries[j] * 4 * 2 * PI * t)+ 0.037 * HeightDistribution[j] * sin(TwelveToneSeries[j] *5 * 2 * PI * t);
-			NumOfNote++;
+			//大于第min大对应的数值，就加入Intensity中；
+			if ((HeightDistribution[j] >= SortHD[min - 1])&&(NumOfNote<min))//防止并列第min的情况（这种情况应该不多，但如果出现的话，则选取更低的音）
+			{
+				//第一项是基音，后面加了四项泛音（由网上搜索的钢琴频谱图换算而来），试图粗略地模拟钢琴音色
+				Intensity += HeightDistribution[j] * sin(TwelveToneSeries[j] * 2 * PI * t) +
+					0.1 * HeightDistribution[j] * sin(TwelveToneSeries[j] * 2 * 2 * PI * t) + 0.056 * HeightDistribution[j] * sin(TwelveToneSeries[j] * 3 * 2 * PI * t) +
+					0.042 * HeightDistribution[j] * sin(TwelveToneSeries[j] * 4 * 2 * PI * t) + 0.037 * HeightDistribution[j] * sin(TwelveToneSeries[j] * 5 * 2 * PI * t);
+				NumOfNote++;
+			}
 		}
 		
 		Intensity /= ScreenWidth * ScreenHeight; //振幅取均值
@@ -231,4 +235,5 @@ void DiscJockey::MakeClusters(const double& kDuration)
 	//写入并播放
 	result = waveOutPrepareHeader(hWaveOut, &header, sizeof(WAVEHDR));
 	result = waveOutWrite(hWaveOut, &header, sizeof(WAVEHDR));
+	
 }
