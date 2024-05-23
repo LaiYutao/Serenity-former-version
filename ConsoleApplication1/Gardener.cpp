@@ -56,7 +56,7 @@ void Gardener::UpdateCompoundHeight()
 
 void Gardener::SelectPosition()
 {
-	double MovingSpeed = 3;//移动速度为3 pixel per sec
+	double MovingSpeed = 5;//移动速度为5 pixel per sec
 	
 	//向上: 按下“W”，且不超界，且此时没有按着“J”和“K”；
 	if ((GetAsyncKeyState((unsigned short)'W') & 0x8000)&&(PlantingPoint.getYPos()>0)&& !(GetAsyncKeyState((unsigned short)'J') & 0x8000)&& !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
@@ -65,7 +65,7 @@ void Gardener::SelectPosition()
 	}
 
 	//向下: 按下“S”，且不超界，且此时没有按着“J”和“K”；
-	if ((GetAsyncKeyState((unsigned short)'S') & 0x8000) && (PlantingPoint.getYPos() < ScreenHeight-1) && !(GetAsyncKeyState((unsigned short)'J') & 0x8000) && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
+	if ((GetAsyncKeyState((unsigned short)'S') & 0x8000) && (PlantingPoint.getYPos() < ScreenHeight-3) && !(GetAsyncKeyState((unsigned short)'J') & 0x8000) && !(GetAsyncKeyState((unsigned short)'K') & 0x8000))
 	{
 		PlantingPoint.setYPos(PlantingPoint.getYPos() + MovingSpeed * FrameTime / 1000);
 	}

@@ -72,9 +72,16 @@ void Monitor::AddPlantingPoint(std::vector<char>& buffer, const Point& plantingP
 
 void Monitor::AddStatusBar(std::vector<char> buffer,char*& screenShow,const Point& plantingPoint, const int& numOfCircularField, const int& numOfSpiralField)
 {
-	//将最底下一行清空
+	//加上一行分割线并将最底下一行清空
 	for (int i = (ScreenHeight - 1) * ScreenWidth;i < ScreenHeight * ScreenWidth;++i)
 	{
+		if ((i - ScreenWidth) % 2 == 0) {
+			buffer[i - ScreenWidth] = '=';
+		}
+		else
+		{
+			buffer[i - ScreenWidth] = '|';
+		}
 		buffer[i] = ' ';
 	}
 	
@@ -84,5 +91,5 @@ void Monitor::AddStatusBar(std::vector<char> buffer,char*& screenShow,const Poin
 		screenShow[i] = buffer[i];
 	}
 
-	sprintf_s(&screenShow[(ScreenHeight - 1) * ScreenWidth], ScreenWidth, "  PlantPoint: X=%3.2f, Y=%3.2f;  NumOfFields: CircularField=%2.i, SpiralField=%2.i, Total=%2.i  ", plantingPoint.getXPos(), plantingPoint.getYPos(), numOfCircularField, numOfSpiralField, numOfCircularField + numOfSpiralField);
+	sprintf_s(&screenShow[(ScreenHeight - 1) * ScreenWidth], ScreenWidth-1, "  PlantPoint: X=%3.2f, Y=%3.2f;   NumOfFields: CircularField=%2.i, SpiralField=%2.i, Total=%2.i    \0", plantingPoint.getXPos(), plantingPoint.getYPos(), numOfCircularField, numOfSpiralField, numOfCircularField + numOfSpiralField);
 }

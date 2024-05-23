@@ -10,8 +10,8 @@
 //以下宏常量都是针对游戏主画面的（不含封面页、过渡页）
 #define ScreenWidth 240 //游戏主画面的宽
 #define ScreenHeight 150 //游戏主画面的高
-#define FontWidth 5 //游戏主画面的字宽
-#define FontHeight 5 //游戏主画面的字高
+#define FontWidth 6 //游戏主画面的字宽
+#define FontHeight 6 //游戏主画面的字高
 #define FrameTime 100 //单位为毫秒
 #define GrayScale 13//灰度阶阶数，直接影响细腻程度
 

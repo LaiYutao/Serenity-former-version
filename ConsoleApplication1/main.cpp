@@ -115,7 +115,7 @@ void Act(ScreenManager TheScreenManager)
 void Tips()
 {
 	using namespace std;
-	cout << "\n基础设置：（win11操作系统）" << endl;
+	cout << "基础设置：（win11操作系统）" << endl;
 	cout << "1.点击窗口上方标题栏中类似“V”的符号（偏左，在“+”右边），再点击设置。" << endl;
 	cout << "2.在“启动”选项中，在右侧第二行“默认终端应用程序”中，点击最右端类似“V”的按键，将选项设置为“Windows控制台主机”。右下角处点击蓝色键“保存”。" << endl;
 	cout << "3.设置完成。请关闭并重新启动此程序。" << endl;
